@@ -12,7 +12,8 @@ export const colors = {
     primaryBlue: '#0055ffff',
     darkBlue: '#0f1055ff',
     lightGrey: '#8995adff',
-    regularGrey: '#cbcbcbff'
+    regularGrey: '#cbcbcbff',
+    customRed: '#e92727'
 }
 
 export const fontFamily = {
