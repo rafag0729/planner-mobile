@@ -8,9 +8,8 @@ export const Activity = () => {
     return (
         <View 
             style={{ 
-                backgroundColor: 'yellow',
+                backgroundColor: 'red',
                 height: 150,
-                borderRadius: 10,
                 position: 'absolute',
                 top: 25,
                 right: 10,

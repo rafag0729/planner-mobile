@@ -1,7 +1,6 @@
 import React from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
-import { CalendarIcon, NavigationArrow } from '../shared/assetsManager';
-import { Activity } from '../shared/componentsManager';
+import { DateNavigation, Activity } from '../shared/componentsManager';
 import { colors, fontFamily } from '../styles/generalStyles';
 
 
@@ -16,23 +15,7 @@ export const DailyScreen = () => {
             <Text style={ styles.mainTextHead }>SEPTIEMBRE 2021</Text>
             <Text style={ styles.subTextHead }>Viernes 2</Text>
 
-
-            {/* Date Navigation */}
-            <View style={ styles.dateNavigation }>
-                <View>
-                    <CalendarIcon />
-                </View>
-
-                <View style={{ flexDirection: 'row', alignItems: 'center'}}>
-                    <NavigationArrow 
-                        direction='left'
-                        style={ styles.dateNavigationItems } />
-                    <Text style={{ ...styles.dateNavigationItems, ...styles.textDateNavigation }}>Hoy</Text>
-                    <NavigationArrow 
-                        direction='rigth'
-                        style={ styles.dateNavigationItems } />
-                </View>
-            </View>
+            <DateNavigation />
 
             {/* Calendar */}
             <ScrollView
@@ -136,22 +119,7 @@ const styles = StyleSheet.create({
         fontSize: 28,
         fontFamily: fontFamily.bold,
         color: colors.primaryBlue
-    },
-
-
-    dateNavigation: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center'
-    },
-    dateNavigationItems: {
-        marginHorizontal: 7
-    },
-    textDateNavigation: {
-        fontFamily: fontFamily.regular,
-        color: colors.primaryBlue,
-        fontSize: 17
-    },
+    },    
 
     calendarHourContainer: {
         height: 100,
