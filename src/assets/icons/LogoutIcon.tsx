@@ -1,6 +1,6 @@
-import React from "react";
-import { View } from "react-native";
 import Svg, { SvgProps, G, Path } from "react-native-svg";
+import React from "react";
+
 
 
 

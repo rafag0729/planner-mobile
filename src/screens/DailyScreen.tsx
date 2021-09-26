@@ -1,8 +1,8 @@
 import React from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
-import { buildingCalendar } from '../helpers/buildingCalendar';
-import { NavigationArrow } from '../shared/assetsManager';
+import { CalendarIcon, NavigationArrow } from '../shared/assetsManager';
 import { colors, fontFamily } from '../styles/generalStyles';
+
 
 
 
@@ -18,18 +18,24 @@ export const DailyScreen = () => {
 
             {/* Date Navigation */}
             <View style={ styles.dateNavigation }>
-                <NavigationArrow 
-                    direction='left'
-                    style={ styles.dateNavigationItems } />
-                <Text style={{ ...styles.dateNavigationItems, ...styles.textDateNavigation }}>Hoy</Text>
-                <NavigationArrow 
-                    direction='rigth'
-                    style={ styles.dateNavigationItems } />
+                <View>
+                    <CalendarIcon />
+                </View>
+
+                <View style={{ flexDirection: 'row', alignItems: 'center'}}>
+                    <NavigationArrow 
+                        direction='left'
+                        style={ styles.dateNavigationItems } />
+                    <Text style={{ ...styles.dateNavigationItems, ...styles.textDateNavigation }}>Hoy</Text>
+                    <NavigationArrow 
+                        direction='rigth'
+                        style={ styles.dateNavigationItems } />
+                </View>
             </View>
 
             {/* Calendar */}
             <ScrollView
-                style={{ marginTop: 20 }}
+                style={{ marginTop: 25 }}
                 showsVerticalScrollIndicator={ false }
                 >
                 
@@ -130,7 +136,7 @@ const styles = StyleSheet.create({
 
     dateNavigation: {
         flexDirection: 'row',
-        justifyContent: 'flex-end',
+        justifyContent: 'space-between',
         alignItems: 'center'
     },
     dateNavigationItems: {
