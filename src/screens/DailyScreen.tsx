@@ -1,6 +1,7 @@
 import React from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { CalendarIcon, NavigationArrow } from '../shared/assetsManager';
+import { Activity } from '../shared/componentsManager';
 import { colors, fontFamily } from '../styles/generalStyles';
 
 
@@ -41,12 +42,12 @@ export const DailyScreen = () => {
                 
                 {/* Each hour block */}
                 <View style={ styles.calendarHourContainer } >
-                    <View style={{ backgroundColor: 'red', flex: 1}}>
+                    <View style={{ flex: 1}}>
                         <Text style={ styles.textHour }>7:00am</Text>
                     </View>
-                    <View 
-                        style={{ backgroundColor: 'green', flex: 2}}
-                        />
+                    <View style={{ flex: 2}} >
+                        <Activity />
+                    </View>
                 </View>
 
                 {/* Each hour block */}
@@ -54,7 +55,9 @@ export const DailyScreen = () => {
                     <View>
                         <Text style={ styles.textHour }>8:00am</Text>
                     </View>
-                    <View />
+                    <View> 
+                        
+                    </View>
                 </View>
 
                 {/* Each hour block */}
@@ -70,7 +73,9 @@ export const DailyScreen = () => {
                     <View>
                         <Text style={ styles.textHour }>10:00am</Text>
                     </View>
-                    <View />
+                    <View> 
+                        
+                    </View>
                 </View>
 
                 {/* Each hour block */}
