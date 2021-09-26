@@ -1,8 +1,9 @@
-import React from 'react';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+
+import React from 'react';
 import { DailyScreen, MonthlyScreen, WeeklyScreen } from '../shared/screensManager';
 import { colors, fontFamily } from '../styles/generalStyles';
-import { StyleSheet, Text } from 'react-native';
+
 
 
 
@@ -11,7 +12,8 @@ const Tab = createMaterialTopTabNavigator();
 export const Navigator = () => {
   return (
     <Tab.Navigator
-    sceneContainerStyle={{ backgroundColor: 'white' }}
+        initialRouteName="DailyScreen"
+        sceneContainerStyle={{ backgroundColor: 'white' }}
         tabBarPosition="bottom"
         screenOptions={{
             tabBarActiveTintColor: colors.darkBlue,
