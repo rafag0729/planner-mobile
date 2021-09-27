@@ -9,14 +9,14 @@ import { fontFamily } from '../styles/generalStyles';
 export const Activity = () => {
     return (
         <View style={ activityStyles.container } >
-            <View style={ activityStyles.actionsPosition }>
-                <EditIcon size={ 22 } />
-                <DeleteIcon size={ 22 } />
-            </View>
             <View style={{ flex: 1}}>
                 <Text style={{ ...activityStyles.textFormat, fontFamily: fontFamily.bold }}> Activity </Text>
                 <Text style={{ ...activityStyles.textFormat, fontFamily: fontFamily.bold }}> Activity Type: </Text>
                 <Text style={{ ...activityStyles.textFormat, fontFamily: fontFamily.regular }}> Description of the activity</Text>
+            </View>
+            <View style={ activityStyles.actionsPosition }>
+                <EditIcon size={ 22 } />
+                <DeleteIcon size={ 22 } />
             </View>
         </View>
     )
@@ -42,7 +42,7 @@ const activityStyles = StyleSheet.create({
         justifyContent: 'flex-end',
         position: 'absolute',
         right: 3,
-        top: 1
+        bottom: 1
     },
     
 });
