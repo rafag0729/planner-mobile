@@ -1,6 +1,7 @@
 import React from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
-import { DateNavigation, Activity } from '../shared/componentsManager';
+
+import { DateHeaders, DateNavigation, Activity } from '../shared/componentsManager';
 import { colors, fontFamily } from '../styles/generalStyles';
 
 
@@ -11,9 +12,7 @@ export const DailyScreen = () => {
     return (
         <View style={{ flex: 1, padding: 5}}>
 
-            {/* Text Header */}
-            <Text style={ styles.mainTextHead }>SEPTIEMBRE 2021</Text>
-            <Text style={ styles.subTextHead }>Viernes 2</Text>
+            <DateHeaders />
 
             <DateNavigation />
 
@@ -108,19 +107,7 @@ export const DailyScreen = () => {
 }
 
 const styles = StyleSheet.create({
-    mainTextHead: {
-        fontSize: 36,
-        color: colors.darkBlue,
-        fontFamily: fontFamily.bold,
-        marginTop: 10
-    },
-    subTextHead: {
-        marginTop: -20,
-        fontSize: 28,
-        fontFamily: fontFamily.bold,
-        color: colors.primaryBlue
-    },    
-
+    
     calendarHourContainer: {
         height: 100,
         borderBottomWidth: .5,

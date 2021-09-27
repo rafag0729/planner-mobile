@@ -14,6 +14,15 @@ export type AppActions =
     | { type: 'Update an activity', payload: Activity }
     | { type: 'Remove activity', payload: string }
 
+
+// Dates
+export type DateSpecs = {
+    day: number;
+    dayName: String;
+    month: string;
+    year: number;
+}
+
 // Activities
 
 export interface Activity {
