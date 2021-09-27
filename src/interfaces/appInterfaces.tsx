@@ -3,7 +3,8 @@
 export interface AppContextInterface {
     daySelected: Date;
     user?: User;
-    activities: Activity[]
+    activities: Activity[];
+    dispatcher?: any
 }
 
 export type AppActions = 

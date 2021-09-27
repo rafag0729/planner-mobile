@@ -1,6 +1,9 @@
-import DatePicker from 'react-native-date-picker'
-import React, { useEffect, useState } from 'react';
+import DateTimePicker from '@react-native-community/datetimepicker';
+import React, { useContext, useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+
+import { AppContext } from '../context/AppContext';
+import { setDate } from '../reducer/appActions';
 import { CalendarIcon, NavigationArrow } from '../shared/assetsManager';
 import { colors, fontFamily } from '../styles/generalStyles';
 
@@ -10,26 +13,36 @@ import { colors, fontFamily } from '../styles/generalStyles';
 
 export const DateNavigation = () => {
 
-    const [date, setDate] = useState<Date>( new Date() )
-    const [pickerStatus, setPickerStatus] = useState<boolean>(false)
+    const { daySelected, dispatcher } = useContext(AppContext)
+    const [ pickerStatus, setPickerStatus ] = useState<boolean>(false)    
 
-    useEffect(() => {
-        console.log('new date: ', date)
-    }, [date])
+    /* Updating date based on picker */
+    const handleDateChange = ( date: any ) => {
 
+        if(date){
+            dispatcher( setDate( date ) );
+        }
+        setPickerStatus( false );
+    }
+
+    
     return (
         <>
             <View style={ dateNavigatioStyles.dateNavigation }>
                 <TouchableOpacity
                     onPress={ () => setPickerStatus( true ) }
                     >
-                    <CalendarIcon />
+                    <CalendarIcon size={ 35 } />
                 </TouchableOpacity>
 
                 <View style={{ flexDirection: 'row', alignItems: 'center'}}>
-                    <NavigationArrow 
-                        direction='left'
-                        style={ dateNavigatioStyles.dateNavigationItems } />
+                    <TouchableOpacity
+                        onPress={ () => setPickerStatus( false )}
+                        >
+                        <NavigationArrow 
+                            direction='left'
+                            style={ dateNavigatioStyles.dateNavigationItems } />
+                    </TouchableOpacity>
                     <Text style={{ ...dateNavigatioStyles.dateNavigationItems, ...dateNavigatioStyles.textDateNavigation }}>Hoy</Text>
                     <NavigationArrow 
                         direction='rigth'
@@ -37,23 +50,16 @@ export const DateNavigation = () => {
                 </View>
             </View>
 
-            <DatePicker
-                mode="date"
-                title="Seleccionar una fecha"
-                cancelText="Cancelar"
-                confirmText="Seleccionar"
-                fadeToColor="blue"
-                locale="es-CO"
-                modal
-                open={ pickerStatus }
-                date={ date }
-                onConfirm={ ( value: Date ) => {
-                    setDate( value )
-                    setPickerStatus( false )
-                 }}
-                onCancel={() => () => setPickerStatus( false ) }
-                onDateChange={ console.log }
-            />
+            {   pickerStatus && (
+                <DateTimePicker
+                    value={ daySelected }
+                    /* mode={mode}
+                    is24Hour={true}
+                    display="default" */
+                    onChange={ ( e: any, date: any ) => handleDateChange(date) }
+                />
+              )
+            }
         </>
     )
 }

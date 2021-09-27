@@ -20,7 +20,8 @@ export const AppContextProvider = ({ children }: any ) => {
 
     return (
         <AppContext.Provider value={{
-            ...contextInfo
+            ...contextInfo,
+            dispatcher: dispatch
         }}>
             { children }
         </AppContext.Provider>
