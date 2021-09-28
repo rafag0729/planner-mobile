@@ -10,7 +10,9 @@ interface Props extends SvgProps{
 
 export const CalendarIcon = ({size = 46}: Props) => {
     return (
-        <Svg id="SVGRoot" width={`${ size }px`} height={`${ size }px`} viewBox="0 0 46 46" >
+        <Svg 
+            style={{ marginLeft: 10 }}
+            id="SVGRoot" width={`${ size }px`} height={`${ size }px`} viewBox="0 0 46 46" >
             <G transform="matrix(.10045 0 0 .10045 -2.7143 -2.7143)" stroke="#05f" strokeWidth="20">
             <Rect x="48" y="80" width="416" height="384" rx="36.445" ry="38.933" fill="none" strokeLinejoin="round" strokeWidth="31.999"/>
             <G fill="#05f">

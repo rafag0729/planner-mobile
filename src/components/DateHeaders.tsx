@@ -46,6 +46,6 @@ const styles = StyleSheet.create({
         marginTop: -20,
         fontSize: 28,
         fontFamily: fontFamily.bold,
-        color: colors.primaryBlue
+        color: colors.lightBlue
     },    
 });
