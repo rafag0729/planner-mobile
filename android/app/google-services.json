@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "190725941083",
+    "project_id": "cronosmobileapp",
+    "storage_bucket": "cronosmobileapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:190725941083:android:39293469073a082f5e1c7e",
+        "android_client_info": {
+          "package_name": "com.cronos"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "190725941083-8v6t14qfjferi4lej069kufkg6vrbn27.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBAncoQGo77r_wYGkzULA4_eDci5bD985c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "190725941083-8v6t14qfjferi4lej069kufkg6vrbn27.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
