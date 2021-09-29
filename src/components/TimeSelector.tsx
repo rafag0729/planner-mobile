@@ -26,7 +26,7 @@ export const TimeSelector = ({ settingHour, timerText, text}: Props) => {
                 setPickerStatus( true );
             }}
             >
-            <Text style={{ color: 'grey' }}>{ text }</Text>
+            <Text style={{ color: 'grey' }}><Text style={ styles.requiredIndicator }>*</Text> { text }</Text>
         </TouchableOpacity>
         {   pickerStatus && (
                 <DateTimePicker 
@@ -50,5 +50,8 @@ const styles = StyleSheet.create({
         borderBottomWidth: 2,
         padding: 7,
         color: colors.regularGrey,
+    },
+    requiredIndicator: {
+        color: colors.customRed,
     }
 })

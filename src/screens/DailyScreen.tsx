@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View } from 'react-native';
 
 import { DateHeaders, DateNavigation, DailySchedule, CustomModal } from '../shared/componentsManager';
@@ -8,6 +8,8 @@ import { DateHeaders, DateNavigation, DailySchedule, CustomModal } from '../shar
 
 export const DailyScreen = () => {
 
+    const [showModal, setShowModal] = useState(true)
+
     return (
         <View style={{ flex: 1, padding: 5}}>
             <DateHeaders />
@@ -16,7 +18,10 @@ export const DailyScreen = () => {
 
             <DailySchedule />            
             
-            <CustomModal />
+            <CustomModal
+                visible={ showModal }
+                setShowModal={ ( value: boolean ) => setShowModal( value ) }
+                />
         </View>
     )
 }
