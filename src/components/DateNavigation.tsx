@@ -1,4 +1,4 @@
-import DateTimePicker from '@react-native-community/datetimepicker';
+import DateTimePicker, { AndroidEvent } from '@react-native-community/datetimepicker';
 import React, { useContext, useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
@@ -17,7 +17,7 @@ export const DateNavigation = () => {
     const [ pickerStatus, setPickerStatus ] = useState<boolean>(false)    
 
     /* Updating date based on picker */
-    const handleDateChange = ( date: any ) => {
+    const handleDateChange = ( date: Date | undefined ) => {
 
         if(date){
             dispatcher( setDate( date ) );
@@ -56,7 +56,7 @@ export const DateNavigation = () => {
                     /* mode={mode}
                     is24Hour={true}
                     display="default" */
-                    onChange={ ( e: any, date: any ) => handleDateChange(date) }
+                    onChange={ (data: AndroidEvent, date: Date | undefined ) => { handleDateChange( date ) } }
                 />
               )
             }

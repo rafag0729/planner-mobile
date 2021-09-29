@@ -4,6 +4,8 @@ import { DateNavigation } from "../components/DateNavigation";
 import { DateHeaders } from '../components/DateHeaders';
 import { DailySchedule } from '../components/DailySchedule';
 import { HourOfDay } from '../components/HourOfDay';
+import { CustomModal } from "../components/CustomModal";
+import { TimeSelector } from "../components/TimeSelector";
 
 
 
@@ -14,5 +16,7 @@ export {
     DateNavigation,    
     DailySchedule,
     Activity,
-    HourOfDay
+    HourOfDay,
+    CustomModal,
+    TimeSelector
 }
