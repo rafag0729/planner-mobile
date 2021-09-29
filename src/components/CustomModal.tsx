@@ -1,21 +1,22 @@
 import React from 'react';
 import { KeyboardAvoidingView, Modal, Platform, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
-import { TimeSelector } from './../shared/componentsManager';
-import { useForm } from '../hooks/hooksManager';
-import { getAccuratePickerHour } from '../helpers/helpersManager';
+import { TimeSelector, Loading, CustomAlert } from './../shared/componentsManager';
+import { useForm, useActivityPetition } from '../hooks/hooksManager';
 import { colors, fontFamily } from '../styles/generalStyles';
+import { getAccuratePickerHour } from '../helpers/getAccuratePickerHour';
 
 
 
 
 interface Props {
     visible: boolean;
-    setShowModal: ( value: boolean) => void;
+    setShowModal: (value: boolean) => void;
 }
 
 export const CustomModal = ({ visible, setShowModal }: Props) => {
 
+    const { isEditing, isLoading, petitionCompleted } = useActivityPetition()
     const { activityName, activityType, activityDescription, startTime, endTime, handleInputChange } = useForm({
         activityName: '',
         activityType: '',
@@ -28,7 +29,6 @@ export const CustomModal = ({ visible, setShowModal }: Props) => {
     const settingHour = ( time: Date | undefined, timerTitle: 'startTime' | 'endTime' ) => { 
         if(time){
             const { hour, minutes } = getAccuratePickerHour( time );
-            
             handleInputChange(`${hour}:${minutes} ${hour < 13 ? 'am' : 'pm'}`, timerTitle );
         }
     }
@@ -37,7 +37,10 @@ export const CustomModal = ({ visible, setShowModal }: Props) => {
         <Modal
             animationType="slide"
             visible={ visible }
+            onRequestClose={ () => setShowModal( false ) }
             > 
+            
+            {/* ModalScreen to create and update´ */}
             <KeyboardAvoidingView
                 behavior={ Platform.OS === 'ios' ? 'padding' : 'height'}
                 style={ styles.modalContainer }
@@ -109,7 +112,9 @@ export const CustomModal = ({ visible, setShowModal }: Props) => {
                                 activeOpacity={ ( !activityName || !activityType ) ? 1 : .6 }
                                 onPress={ () => {
                                     if ( !activityName || !activityType ) return null;
-                                    console.log('Llegue hasta aqui')
+                                    
+
+
                                 }}
                                 >
                                 <Text style={ styles.textButton } >Aceptar</Text>
@@ -118,6 +123,14 @@ export const CustomModal = ({ visible, setShowModal }: Props) => {
                     </View>
                 </ScrollView>
             </KeyboardAvoidingView>
+
+            {   isLoading && <Loading /> }
+                        
+            {   petitionCompleted && (
+                    <CustomAlert
+                        type='failed'
+                        />
+            )}
         </Modal>
     )
 }
