@@ -27,11 +27,10 @@ export type DateSpecs = {
 
 export interface Activity {
     project: string;
-    activityType: string,
-    description: string,
+    activityType: string;
+    description: string;
     initialTime: Date;
     finishTime: Date;
-    color: string;
 }
 
 
@@ -42,3 +41,13 @@ export interface User {
     id: string,
     authenticated: boolean;
 }
+
+// ProjectName and ProjectType
+
+export interface ProjectInterface {
+    id: string;
+    name: string
+    color?: string; 
+}
+
+export type ModalType = 'creation' | 'edition' | '';

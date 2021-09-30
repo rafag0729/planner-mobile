@@ -1,24 +1,28 @@
 import React from 'react';
-import { KeyboardAvoidingView, Modal, Platform, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Animated, Dimensions, KeyboardAvoidingView, Modal, Platform, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
-import { TimeSelector, Loading, CustomAlert } from './../shared/componentsManager';
+import { TimeSelector, CustomSelector, Loading, CustomAlert } from './../shared/componentsManager';
 import { useForm, useActivityPetition } from '../hooks/hooksManager';
+import { ModalType } from '../interfaces/appInterfaces';
+import { getAccuratePickerHour } from '../helpers/helpersManager';
 import { colors, fontFamily } from '../styles/generalStyles';
-import { getAccuratePickerHour } from '../helpers/getAccuratePickerHour';
 
 
 
+
+const { width } = Dimensions.get('screen')
 
 interface Props {
+    type: ModalType;
     visible: boolean;
     setShowModal: (value: boolean) => void;
 }
 
-export const CustomModal = ({ visible, setShowModal }: Props) => {
+export const CustomModal = ({ type, visible, setShowModal }: Props) => {
 
-    const { isEditing, isLoading, petitionCompleted } = useActivityPetition()
-    const { activityName, activityType, activityDescription, startTime, endTime, handleInputChange } = useForm({
-        activityName: '',
+    const { modalPosition, createActivity } = useActivityPetition()
+    const { projectName, activityType, activityDescription, startTime, endTime, handleInputChange } = useForm({
+        projectName: '',
         activityType: '',
         activityDescription: '',
         activityDay: '',
@@ -32,7 +36,7 @@ export const CustomModal = ({ visible, setShowModal }: Props) => {
             handleInputChange(`${hour}:${minutes} ${hour < 13 ? 'am' : 'pm'}`, timerTitle );
         }
     }
-
+    
     return (
         <Modal
             animationType="slide"
@@ -40,97 +44,108 @@ export const CustomModal = ({ visible, setShowModal }: Props) => {
             onRequestClose={ () => setShowModal( false ) }
             > 
             
-            {/* ModalScreen to create and update´ */}
-            <KeyboardAvoidingView
-                behavior={ Platform.OS === 'ios' ? 'padding' : 'height'}
-                style={ styles.modalContainer }
+            {/* All modals screen container */}
+            <Animated.View
+                style={{ 
+                    flexDirection: 'row', 
+                    width: width * 3,
+                    transform: [{
+                        translateX: modalPosition
+                    }]
+                }}
                 >
-            {/* Container for the modal */}
-                <ScrollView
-                    showsVerticalScrollIndicator={ false }
+                   
+                {/* ModalScreen to create and update´ */}
+                <KeyboardAvoidingView
+                    behavior={ Platform.OS === 'ios' ? 'padding' : 'height'}
+                    style={{ ...styles.modalContainer, width }}
                     >
-                    <Text style={ styles.modalHeader }>Crear actividad</Text>
+                    <ScrollView
+                        showsVerticalScrollIndicator={ false }
+                        >
+                        <Text style={ styles.modalHeader }>
+                            { type === 'creation' ? 'Crear actividad' : 'Editar actividad'}
+                        </Text>
 
-                    {/* Name of the activity */}
-                    <Text style={ styles.modalText } >Nombre del proyecto<Text style={ styles.requiredIndicator }>*</Text></Text>
-                    <TextInput 
-                        style={ styles.inputContainer }
-                        autoCorrect={ false }
-                        onChangeText={ (value: string) => handleInputChange( value, 'activityName') }
-                        value={ activityName }
-                        />
-
-                    {/* Type of the activity */}
-                    <Text style={ styles.modalText } >Tipo de actividad<Text style={ styles.requiredIndicator }>*</Text></Text>
-                    <TextInput 
-                        style={ styles.inputContainer }
-                        autoCorrect={ false }
-                        onChangeText={ (value: string) => handleInputChange( value, 'activityType')}
-                        value={ activityType }
-                        />
-
-                    {/* Description of the activity */}
-                    <Text style={ styles.modalText } >¿Qué realizaste?</Text>
-                    <TextInput 
-                        style={[ styles.inputContainer, styles.textAreaContainer ]}
-                        autoCorrect={ false }
-                        multiline
-                        numberOfLines={ 4 }
-                        onChangeText={ (value: string) => handleInputChange( value, 'activityDescription')}
-                        value={ activityDescription }
-                        />
-
-                    {/* Time frame of the activities */}
-                    <Text style={ styles.modalText } >Desde - hasta</Text>
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }} >
-                        <TimeSelector 
-                            text={ startTime }
-                            settingHour={ settingHour }
-                            timerText='startTime'
+                        {/* Name of the activity */}
+                        <Text style={ styles.modalText } >Nombre del proyecto<Text style={ styles.requiredIndicator }>*</Text></Text>
+                        <CustomSelector
+                            dataType='projects'
+                            field="projectName"
+                            getInputValue={ (value: string, field: 'projectName' | 'activityType' ) => handleInputChange( value, field ) }
+                            textValue={ projectName }
                             />
-                            
-                        <TimeSelector 
-                            text={ endTime }
-                            settingHour={ settingHour }
-                            timerText='endTime'
+
+                        {/* Type of the activity */}
+                        <Text style={ styles.modalText } >Tipo de actividad<Text style={ styles.requiredIndicator }>*</Text></Text>
+                        <CustomSelector 
+                            dataType='projectTypes'
+                            field="activityType"
+                            getInputValue={ (value: string, field: 'projectName' | 'activityType' ) => handleInputChange( value, field ) }
+                            textValue={ activityType }
                             />
-                    </View>
-                
 
-                    {/* Modal's button actions */}
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', marginTop: 40, marginBottom: 40 }}>
-                        <TouchableOpacity
-                            style={ styles.modalButton }
-                            onPress={ () => setShowModal( false ) }
-                            >
-                            <Text style={ styles.textButton } >Cancelar</Text>
-                        </TouchableOpacity>
+                        {/* Description of the activity */}
+                        <Text style={ styles.modalText } >¿Qué realizaste?</Text>
+                        <TextInput 
+                            style={[ styles.inputContainer, styles.textAreaContainer ]}
+                            autoCorrect={ false }
+                            multiline
+                            numberOfLines={ 4 }
+                            onChangeText={ (value: string) => handleInputChange( value, 'activityDescription')}
+                            value={ activityDescription }
+                            />
 
-                        <View style={{ opacity: (!activityName || !activityType) ? .5 : 1 }}>
+                        {/* Time frame of the activities */}
+                        <Text style={ styles.modalText } >Desde - hasta</Text>
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }} >
+                            <TimeSelector 
+                                text={ startTime }
+                                settingHour={ settingHour }
+                                timerText='startTime'
+                                />
+                                
+                            <TimeSelector 
+                                text={ endTime }
+                                settingHour={ settingHour }
+                                timerText='endTime'
+                                />
+                        </View>
+                    
+
+                        {/* Modal's button actions */}
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', marginTop: 40, marginBottom: 40 }}>
                             <TouchableOpacity
                                 style={ styles.modalButton }
-                                activeOpacity={ ( !activityName || !activityType ) ? 1 : .6 }
-                                onPress={ () => {
-                                    if ( !activityName || !activityType ) return null;
-                                    
-
-
-                                }}
+                                onPress={ () => setShowModal( false ) }
                                 >
-                                <Text style={ styles.textButton } >Aceptar</Text>
+                                <Text style={ styles.textButton } >Cancelar</Text>
                             </TouchableOpacity>
-                        </View>
-                    </View>
-                </ScrollView>
-            </KeyboardAvoidingView>
 
-            {   isLoading && <Loading /> }
-                        
-            {   petitionCompleted && (
-                    <CustomAlert
-                        type='failed'
-                        />
-            )}
+                            <View style={{ opacity: (!projectName || !activityType) ? .5 : 1 }}>
+                                <TouchableOpacity
+                                    style={ styles.modalButton }
+                                    activeOpacity={ ( !projectName || !activityType ) ? 1 : .6 }
+                                    onPress={ () => {
+                                        if ( !projectName || !activityType ) return null;
+                                        
+                                        /* createActivity(); */
+
+                                    }}
+                                    >
+                                    <Text style={ styles.textButton } >Aceptar</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    </ScrollView>
+                </KeyboardAvoidingView>
+
+                <Loading />
+                            
+                <CustomAlert
+                    type='failed'
+                    />
+            </Animated.View >
         </Modal>
     )
 }
@@ -139,15 +154,15 @@ export const CustomModal = ({ visible, setShowModal }: Props) => {
 
 const styles = StyleSheet.create({
     modalContainer: {
-        flex: 1,
-        paddingVertical: 30,
         paddingHorizontal: 20  
     },
     modalHeader: {
         fontFamily: fontFamily.bold,
         fontSize: 28,
         color: colors.lightBlue,
-        textAlign: 'center'
+        textAlign: 'center',
+        marginTop: 30
+
     },
     requiredIndicator: {
         color: colors.customRed,

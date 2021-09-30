@@ -1,14 +1,32 @@
+import firestore from '@react-native-firebase/firestore';
 import { useState } from "react"
+
+import { Activity } from '../interfaces/appInterfaces';
+import { useMoveModalAnimation } from "./hooksManager";
+
+
 
 
 export const useActivityPetition = () => {
 
-    const [isEditing, setIsEditing] = useState(true);
+    const { modalPosition, moveToRight } = useMoveModalAnimation()
+    
     const [isLoading, setIsLoading] = useState(false);
-    const [petitionCompleted, setPetitionCompleted] = useState(false);
 
-    const createActivity = () => {
-        console.log('Petition delete')
+    const createActivity = async( activity : Activity) => {
+        setIsLoading( true );
+        moveToRight( 1 ) ;
+
+        try {
+            const resp = await firestore().collection('users/fechas/actividades').add({})    
+            console.log( resp );
+        } catch (error) {
+            console.log(error)
+        }
+        
+        
+
+        
     }
 
     const updateActivity = () => {
@@ -20,12 +38,8 @@ export const useActivityPetition = () => {
     }
 
     return {
-        isEditing,
-        isLoading,
-        createActivity,
-        updateActivity,
-        deleteActivity,
-        petitionCompleted
+        modalPosition,
+        createActivity
     }
 
 }
