@@ -9,8 +9,8 @@ import { ModalType } from '../interfaces/appInterfaces';
 
 export const DailyScreen = () => {
 
-    const [showModal, setShowModal] = useState(true);
-    const [modalType, setModalType] = useState<ModalType>('edition');
+    const [showModal, setShowModal] = useState(false);
+    const [modalType, setModalType] = useState<ModalType>('');
     
     return (
         <View style={{ flex: 1, padding: 5}}>
@@ -18,7 +18,9 @@ export const DailyScreen = () => {
 
             <DateNavigation />
 
-            <DailySchedule />            
+            <DailySchedule 
+                setShowModal={(value: boolean) => setShowModal(value) }
+                />            
             
             <CustomModal
                 type={ modalType }

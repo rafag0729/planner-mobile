@@ -4,7 +4,6 @@ import { Animated, Dimensions, KeyboardAvoidingView, Modal, Platform, ScrollView
 import { TimeSelector, CustomSelector, Loading, CustomAlert } from './../shared/componentsManager';
 import { useForm, useActivityPetition } from '../hooks/hooksManager';
 import { ModalType } from '../interfaces/appInterfaces';
-import { getAccuratePickerHour } from '../helpers/helpersManager';
 import { colors, fontFamily } from '../styles/generalStyles';
 
 
@@ -20,22 +19,16 @@ interface Props {
 
 export const CustomModal = ({ type, visible, setShowModal }: Props) => {
 
-    const { modalPosition, createActivity } = useActivityPetition()
-    const { projectName, activityType, activityDescription, startTime, endTime, handleInputChange } = useForm({
+    const { modalPosition, respType, submitActivity } = useActivityPetition( setShowModal )
+    const { formValues, projectName, activityType, description, startTime, endTime, setFormValues, settingHour, handleInputChange } = useForm({
+        id: null,
         projectName: '',
         activityType: '',
-        activityDescription: '',
-        activityDay: '',
+        description: '',
         startTime: '--:-- am/pm',
-        endTime: '--:-- am/pm'
+        endTime: '--:-- am/pm',
+        day: ''
     })
-
-    const settingHour = ( time: Date | undefined, timerTitle: 'startTime' | 'endTime' ) => { 
-        if(time){
-            const { hour, minutes } = getAccuratePickerHour( time );
-            handleInputChange(`${hour}:${minutes} ${hour < 13 ? 'am' : 'pm'}`, timerTitle );
-        }
-    }
     
     return (
         <Modal
@@ -92,8 +85,8 @@ export const CustomModal = ({ type, visible, setShowModal }: Props) => {
                             autoCorrect={ false }
                             multiline
                             numberOfLines={ 4 }
-                            onChangeText={ (value: string) => handleInputChange( value, 'activityDescription')}
-                            value={ activityDescription }
+                            onChangeText={ (value: string) => handleInputChange( value, 'description')}
+                            value={ description }
                             />
 
                         {/* Time frame of the activities */}
@@ -127,10 +120,9 @@ export const CustomModal = ({ type, visible, setShowModal }: Props) => {
                                     style={ styles.modalButton }
                                     activeOpacity={ ( !projectName || !activityType ) ? 1 : .6 }
                                     onPress={ () => {
-                                        if ( !projectName || !activityType ) return null;
-                                        
-                                        /* createActivity(); */
+                                        /* if ( !projectName || !activityType ) return null; */
 
+                                        submitActivity({ ...formValues })
                                     }}
                                     >
                                     <Text style={ styles.textButton } >Aceptar</Text>
@@ -143,7 +135,7 @@ export const CustomModal = ({ type, visible, setShowModal }: Props) => {
                 <Loading />
                             
                 <CustomAlert
-                    type='failed'
+                    type={ respType }
                     />
             </Animated.View >
         </Modal>

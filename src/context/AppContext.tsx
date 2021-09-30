@@ -8,7 +8,8 @@ import { appReducer } from '../reducer/appReducer';
 
 const initialValues: AppContextInterface = {
     daySelected: new Date(),
-    activities: []
+    activities: [],
+    activitySelected: null
 }
 
 

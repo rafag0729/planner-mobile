@@ -2,8 +2,9 @@
 
 export interface AppContextInterface {
     daySelected: Date;
-    user?: User;
     activities: Activity[];
+    activitySelected: Activity | null;
+    user?: User;
     dispatcher?: any
 }
 
@@ -26,11 +27,13 @@ export type DateSpecs = {
 // Activities
 
 export interface Activity {
-    project: string;
+    id?: string | null;
+    projectName: string;
     activityType: string;
     description: string;
-    initialTime: Date;
-    finishTime: Date;
+    startTime: string;
+    endTime: string;
+    day: string;
 }
 
 
@@ -50,4 +53,10 @@ export interface ProjectInterface {
     color?: string; 
 }
 
+
+/*  */
+export type SubmitType = 'creation' | 'edition' | 'delete';
+
 export type ModalType = 'creation' | 'edition' | '';
+
+export type RespType = 'success' | 'failed';
