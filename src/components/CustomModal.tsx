@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Animated, Dimensions, KeyboardAvoidingView, Modal, Platform, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
 import { TimeSelector, CustomSelector, Loading, CustomAlert } from './../shared/componentsManager';
 import { useForm, useActivityPetition } from '../hooks/hooksManager';
 import { ModalType } from '../interfaces/appInterfaces';
 import { colors, fontFamily } from '../styles/generalStyles';
+import { AppContext } from '../context/AppContext';
+import { getDateSpecs } from '../helpers/getDateSpecs';
 
 
 
@@ -19,8 +21,10 @@ interface Props {
 
 export const CustomModal = ({ type, visible, setShowModal }: Props) => {
 
+    const { daySelected } = useContext(AppContext)
+
     const { modalPosition, respType, submitActivity } = useActivityPetition( setShowModal )
-    const { formValues, projectName, activityType, description, startTime, endTime, setFormValues, settingHour, handleInputChange } = useForm({
+    const { formValues, projectName, activityType, description, startTime, endTime, resetForm, settingHour, handleInputChange } = useForm({
         id: null,
         projectName: '',
         activityType: '',
@@ -120,9 +124,9 @@ export const CustomModal = ({ type, visible, setShowModal }: Props) => {
                                     style={ styles.modalButton }
                                     activeOpacity={ ( !projectName || !activityType ) ? 1 : .6 }
                                     onPress={ () => {
-                                        /* if ( !projectName || !activityType ) return null; */
-
-                                        submitActivity({ ...formValues })
+                                        if ( !projectName || !activityType ) return null;                                        const { day, month, year } = getDateSpecs(daySelected)
+                                        submitActivity({ ...formValues, day: `${day}-${month}-${year}` })
+                                        resetForm();
                                     }}
                                     >
                                     <Text style={ styles.textButton } >Aceptar</Text>

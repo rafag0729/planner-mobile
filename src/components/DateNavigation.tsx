@@ -18,7 +18,6 @@ export const DateNavigation = () => {
 
     /* Updating date based on picker */
     const handleDateChange = ( date: Date | undefined ) => {
-
         if(date){
             dispatcher( setDate( date ) );
         }

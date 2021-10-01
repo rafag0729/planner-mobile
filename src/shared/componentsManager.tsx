@@ -1,5 +1,5 @@
 import { Header } from "../components/Header"
-import { Activity } from '../components/Activity';
+import { ActivityNote } from '../components/ActivityNote';
 import { DateNavigation } from "../components/DateNavigation";
 import { DateHeaders } from '../components/DateHeaders';
 import { DailySchedule } from '../components/DailySchedule';
@@ -17,7 +17,7 @@ export {
     DateHeaders,
     DateNavigation,    
     DailySchedule,
-    Activity,
+    ActivityNote,
     CustomSelector,
     CustomModal,
     TimeSelector,

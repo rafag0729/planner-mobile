@@ -11,7 +11,7 @@ export const DailyScreen = () => {
 
     const [showModal, setShowModal] = useState(false);
     const [modalType, setModalType] = useState<ModalType>('');
-    
+
     return (
         <View style={{ flex: 1, padding: 5}}>
             <DateHeaders />

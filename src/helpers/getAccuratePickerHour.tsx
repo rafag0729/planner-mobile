@@ -4,7 +4,7 @@ export const getAccuratePickerHour = (hourToFormat: Date) => {
     let hour = hourToFormat.getHours().toString()
     let minutes = hourToFormat.getMinutes().toString()
     let seconds = hourToFormat.getSeconds().toString()
-    let meridiem = Number(hour) > 13 ? 'pm' : 'am';
+    let meridiem = Number(hour) > 11 ? 'pm' : 'am';
 
     
     if( hour.length === 1 ){

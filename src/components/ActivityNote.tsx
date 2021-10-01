@@ -1,18 +1,23 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+
+import { Activity } from '../interfaces/appInterfaces';
 import { DeleteIcon, EditIcon } from '../shared/assetsManager';
 import { fontFamily } from '../styles/generalStyles';
 
 
 
+interface Props {
+    activity: Activity;
+}
 
-export const Activity = () => {
+export const ActivityNote = ({ activity }: Props) => {
     return (
         <View style={ activityStyles.container } >
             <View style={{ flex: 1}}>
-                <Text style={{ ...activityStyles.textFormat, fontFamily: fontFamily.bold }}> Activity </Text>
-                <Text style={{ ...activityStyles.textFormat, fontFamily: fontFamily.bold }}> Activity Type: </Text>
-                <Text style={{ ...activityStyles.textFormat, fontFamily: fontFamily.regular }}> Description of the activity</Text>
+                <Text style={{ ...activityStyles.textFormat, fontFamily: fontFamily.bold }}> { activity.projectName } </Text>
+                <Text style={{ ...activityStyles.textFormat, fontFamily: fontFamily.bold }}> { activity.activityType }: </Text>
+                <Text style={{ ...activityStyles.textFormat, fontFamily: fontFamily.regular }}> { activity.description } </Text>
             </View>
             <View style={ activityStyles.actionsPosition }>
                 <EditIcon size={ 22 } />

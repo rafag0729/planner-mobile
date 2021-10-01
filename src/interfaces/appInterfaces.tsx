@@ -10,7 +10,8 @@ export interface AppContextInterface {
 
 export type AppActions = 
     | { type: 'Set date', payload: Date }
-    | { type: 'Load activities' }
+    | { type: 'Set initial hour', payload: string }
+    | { type: 'Load activities', payload: Activity[] }
     | { type: 'Add a new activity', payload: Activity }
     | { type: 'Update an activity', payload: Activity }
     | { type: 'Remove activity', payload: string }
@@ -34,6 +35,11 @@ export interface Activity {
     startTime: string;
     endTime: string;
     day: string;
+}
+
+export interface DayActivity {
+    hour: number;
+    activity: Activity[]
 }
 
 

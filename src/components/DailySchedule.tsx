@@ -1,8 +1,13 @@
-import React from 'react';
-import { ScrollView, StyleSheet, Text, TouchableHighlight, TouchableOpacity, View } from 'react-native';
+import React, { useContext, useEffect, useState } from 'react';
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
+import { ActivityNote } from './../shared/componentsManager';
+import { AppContext } from '../context/AppContext';
+import { useActivityPetition } from '../hooks/useActivityPetition';
+import { hourActivityStructure } from '../helpers/helpersManager';
 import { militaryHours } from '../data/dateTimeData';
 import { colors, fontFamily } from '../styles/generalStyles';
+import { DayActivity } from '../interfaces/appInterfaces';
 
 
 
@@ -12,10 +17,25 @@ interface Props {
 
 export const DailySchedule = ({ setShowModal }: Props) => {
 
+    const { activities } = useContext(AppContext)
+    const { loadActivities } = useActivityPetition(() => {} )
+
+    const [activityPerHour, setActivityPerHour] = useState<DayActivity[]>([])
+    
+    useEffect(() => {
+        loadActivities();
+    }, [])
+
+    /* Building structure of the hour and activity */
+    useEffect(() => {
+        const structure = hourActivityStructure( militaryHours, activities )
+        setActivityPerHour( structure )
+    }, [activities])
+
+    
     const showingModal = () => {
         setShowModal( true )
     }
-
 
     return (
         <ScrollView
@@ -25,7 +45,7 @@ export const DailySchedule = ({ setShowModal }: Props) => {
             
             {/* Each hour block */}
             {   
-                militaryHours.map((hour, i) => (
+                activityPerHour.map(({ hour, activity }, i) => (
                     <View 
                         key={ i.toString() }
                         style={ styles.calendarHourContainer } >
@@ -37,7 +57,15 @@ export const DailySchedule = ({ setShowModal }: Props) => {
                             <TouchableOpacity style={{ flex: 1 }} onPress={ showingModal }/>
                             <TouchableOpacity style={{ flex: 1 }} onPress={ showingModal }/>
                             <TouchableOpacity style={{ flex: 1 }} onPress={ showingModal }/>
-                            {/* <Activity /> */}
+
+                            {   activity.map(a => (
+                                    <ActivityNote 
+                                        key={ a.id }
+                                        activity={ a }
+                                        />  
+                                ))
+                            }
+                            
                         </View>
                     </View>
                     )) 

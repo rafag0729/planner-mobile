@@ -28,8 +28,10 @@ export const Header = () => {
 const headerStyles = StyleSheet.create({
     container: {
         width: '100%',
+        height: 60,
         flexDirection: 'row',
         justifyContent: 'flex-end',
+        alignItems: 'center',
         backgroundColor: 'white',
         shadowColor: "#000",
         shadowOffset: {
@@ -53,7 +55,7 @@ const headerStyles = StyleSheet.create({
     subText: {
         fontSize: 12,
         fontFamily: fontFamily.regular,
-        color: colors.lightGrey
+        color: 'grey'
     },
     iconContainer: {
         marginHorizontal: 5,

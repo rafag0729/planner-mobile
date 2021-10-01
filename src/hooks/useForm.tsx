@@ -20,10 +20,17 @@ export const useForm = <T extends Object>( form: T ) => {
         }
     }
 
+    const resetForm = () => {
+        setFormValues({
+            ...form
+        })
+    }
+
     return {
         ...formValues,
         formValues,
         setFormValues,
+        resetForm,
         handleInputChange,
         settingHour
     }

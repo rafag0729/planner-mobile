@@ -10,10 +10,27 @@ export const appReducer = ( state: AppContextInterface, action: AppActions ): Ap
                 ...state,
                 daySelected: action.payload
             }
+
+        case 'Load activities':
+            return {
+                ...state,
+                activities: action.payload
+            }
+        
+        case 'Add a new activity':
+            return {
+                ...state,
+                activities: [
+                    ...state.activities,
+                    action.payload
+                ]
+            }
             
     
         default:
             return state;
+
+        
     }
 }
 
