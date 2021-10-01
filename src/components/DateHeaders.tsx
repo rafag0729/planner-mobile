@@ -1,9 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
-import { AppContext } from '../context/AppContext';
 import { DateSpecs } from '../interfaces/appInterfaces';
-import { getDateSpecs } from '../helpers/helpersManager';
+import { AppContext } from '../context/AppContext';
+import { getDateFromDateObj } from '../helpers/helpersManager';
 import { colors, fontFamily } from '../styles/generalStyles';
 
 
@@ -12,11 +12,11 @@ import { colors, fontFamily } from '../styles/generalStyles';
 export const DateHeaders = () => {
 
     const { daySelected } = useContext(AppContext)
-    const [ date, setDate] = useState<DateSpecs>( getDateSpecs( new Date() ))
+    const [ date, setDate] = useState<DateSpecs>( getDateFromDateObj( new Date() ))
 
     useEffect(() => {
         
-        const { day, dayName, month, year } = getDateSpecs( daySelected );
+        const { day, dayName, month, year } = getDateFromDateObj( daySelected );
         setDate({
             ...date,
             day,

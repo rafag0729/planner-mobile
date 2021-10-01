@@ -25,6 +25,15 @@ export type DateSpecs = {
     year: number;
 }
 
+// Hour Obj
+
+export type TimeSpecs = {
+    hour: number;
+    minutes: number,
+    seconds: number;
+    meridiem?: string;
+}
+
 // Activities
 
 export interface Activity {

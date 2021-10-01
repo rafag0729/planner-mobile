@@ -2,30 +2,39 @@ import firestore from '@react-native-firebase/firestore';
 import { useContext, useState } from "react"
 
 import { Activity, RespType} from '../interfaces/appInterfaces';
-import { useMoveModalAnimation } from "./hooksManager";
-import { AppContext } from '../context/AppContext';
 import { addNewActivity, loadDBActivities } from '../reducer/appActions';
+import { AppContext } from '../context/AppContext';
+import { useMoveModalAnimation } from "./hooksManager";
+import { getDateFromDateObj } from '../helpers/dateHelpers';
 
 
 export const useActivityPetition = <T extends Function>( setShowModal: T ) => {
 
     /* Dispatcher of reducer state */
-    const { dispatcher }  = useContext(AppContext)
+    const { daySelected, dispatcher }  = useContext(AppContext)
 
+    /* Hook for animating modal */
     const { modalPosition, moveToRight } = useMoveModalAnimation()
     
+    
     const [respType, setRespType] = useState<RespType>('failed')
-
 
     /* Function to choose either between a creation or upload petition */
     const submitActivity = (activity: Activity) => {
 
         if(!activity.id){
-            createActivity(activity);
+            /* If no activityId, this will be a creation petition */
+            const { day, month, year } = getDateFromDateObj(daySelected)
+            createActivity({ 
+                ...activity, 
+                day: `${day}-${month}-${year}`
+            });
+
         } else {
             updateActivity(activity);
         }
     }
+
 
     /* Loading activities on any refresh */
     const loadActivities = async() => {
@@ -44,7 +53,6 @@ export const useActivityPetition = <T extends Function>( setShowModal: T ) => {
             console.log( error )
         }
     }
-
 
 
     /* Function to create an activity */

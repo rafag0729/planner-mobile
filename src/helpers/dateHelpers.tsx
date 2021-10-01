@@ -1,8 +1,10 @@
-import { daysOfWeek, months } from '../data/dateTimeData';
 import { DateSpecs } from '../interfaces/appInterfaces';
+import { daysOfWeek, months } from '../data/dateTimeData';
 
 
-export const getDateSpecs = ( date: Date): DateSpecs => {
+
+
+export const getDateFromDateObj = ( date: Date ): DateSpecs => {
 
     const day = date.getDate();
     const dayName = daysOfWeek[date.getDay()];
@@ -15,5 +17,5 @@ export const getDateSpecs = ( date: Date): DateSpecs => {
         month,
         year
     }
-
 }
+

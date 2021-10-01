@@ -1,5 +1,7 @@
-import { useState } from "react"
-import { getAccuratePickerHour } from "../helpers/getAccuratePickerHour";
+import { useState } from "react";
+import { getHourFromDateObj } from '../helpers/timeHelpers';
+
+
 
 
 export const useForm = <T extends Object>( form: T ) => {
@@ -15,7 +17,7 @@ export const useForm = <T extends Object>( form: T ) => {
 
     const settingHour = ( time: Date | undefined, timerTitle: keyof T ) => { 
         if(time){
-            const { hour, minutes, meridiem } = getAccuratePickerHour( time );
+            const { hour, minutes, meridiem } = getHourFromDateObj( time );
             handleInputChange(`${hour}:${minutes} ${meridiem}`, timerTitle);
         }
     }
