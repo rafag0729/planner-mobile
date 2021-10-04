@@ -52,7 +52,7 @@ export const DailySchedule = ({ setShowModal }: Props) => {
                         <View style={{ flex: 1}}>
                             <Text style={ styles.textHour }>{ `${ hour }:00 ${hour > 12 ? 'pm' : 'am' }` }</Text>
                         </View>
-                        <View style={{ flex: 2}} >
+                        <View style={{ flex: 2 }} >
                             <TouchableOpacity style={{ flex: 1 }} onPress={ showingModal }/>
                             <TouchableOpacity style={{ flex: 1 }} onPress={ showingModal }/>
                             <TouchableOpacity style={{ flex: 1 }} onPress={ showingModal }/>
@@ -78,6 +78,9 @@ export const DailySchedule = ({ setShowModal }: Props) => {
 const styles = StyleSheet.create({
     
     calendarHourContainer: {
+        position: 'relative',
+        zIndex: 0,
+        elevation: 0,
         height: 100,
         borderBottomWidth: .5,
         borderBottomColor: colors.lightGrey,

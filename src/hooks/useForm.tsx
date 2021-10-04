@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { getHourFromDateObj } from '../helpers/timeHelpers';
+import { getHourFromDateObj, timeFormatted } from "../helpers/helpersManager";
+
 
 
 
@@ -17,8 +18,7 @@ export const useForm = <T extends Object>( form: T ) => {
 
     const settingHour = ( time: Date | undefined, timerTitle: keyof T ) => { 
         if(time){
-            const { hour, minutes, meridiem } = getHourFromDateObj( time );
-            handleInputChange(`${hour}:${minutes} ${meridiem}`, timerTitle);
+            handleInputChange( timeFormatted( getHourFromDateObj( time ), false ), timerTitle );
         }
     }
 

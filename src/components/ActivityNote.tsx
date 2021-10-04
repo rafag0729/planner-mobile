@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
 import { Activity } from '../interfaces/appInterfaces';
 import { DeleteIcon, EditIcon } from '../shared/assetsManager';
 import { fontFamily } from '../styles/generalStyles';
+import { getActivitySpecs } from '../helpers/helpersManager';
 
 
 
@@ -12,8 +13,22 @@ interface Props {
 }
 
 export const ActivityNote = ({ activity }: Props) => {
+
+    const [position, setPosition] = useState<number>(0);
+    const [length, setLength] = useState<number>(0);
+
+    useEffect(() => {
+        const [ position, length ] = getActivitySpecs( activity );
+        setLength( length );
+        setPosition( position );
+    }, [])
+
     return (
-        <View style={ activityStyles.container } >
+        <View style={{ 
+            ...activityStyles.container,
+            top: 25 * position,
+            height: length * 25
+            }} >
             <View style={{ flex: 1}}>
                 <Text style={{ ...activityStyles.textFormat, fontFamily: fontFamily.bold }}> { activity.projectName } </Text>
                 <Text style={{ ...activityStyles.textFormat, fontFamily: fontFamily.bold }}> { activity.activityType }: </Text>
@@ -35,7 +50,9 @@ const activityStyles = StyleSheet.create({
         top: 25,
         right: 10,
         left: 10,
-        padding: 3
+        padding: 3,
+        zIndex: 999,
+        elevation: 100
     },
     textFormat: {
         color: 'white',

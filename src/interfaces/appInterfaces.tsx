@@ -28,9 +28,9 @@ export type DateSpecs = {
 // Hour Obj
 
 export type TimeSpecs = {
-    hour: number;
-    minutes: number,
-    seconds: number;
+    hour: number | string;
+    minutes: number | string,
+    seconds?: number | string;
     meridiem?: string;
 }
 

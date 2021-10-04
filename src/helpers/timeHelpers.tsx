@@ -1,4 +1,4 @@
-import { TimeSpecs } from "../interfaces/appInterfaces";
+import { TimeSpecs } from '../interfaces/appInterfaces';
 
 
 
@@ -23,17 +23,28 @@ export const getHourFromDateObj = (time: Date): TimeSpecs  => {
 
 export const getHourFromString = (time: string): TimeSpecs => {
 
-    const hourArray = time.split(':');
-    const minuteArray = hourArray[1].split(' ');
-
-    /* const hour ;
-    const minute;
-    const seconds; */
-
+    const [ hour, minutes ] = time.split(':');
 
     return {
-        hour: 1,
-        minutes: 1,
-        seconds: 1
+        hour,
+        minutes
+    }
+    
+}
+
+export const timeFormatted = ({ hour, minutes, seconds, meridiem }: TimeSpecs, militaryHours: boolean = true): string => {
+
+    let hourFormatted = hour;
+
+    if ( militaryHours ){
+        
+        if( hour > 12  ){
+            hourFormatted = Number(hour) - 12;
+        }
+
+        return `${hourFormatted < 10 ? '0'+hourFormatted.toString() : hourFormatted }:${minutes < 10 ? '0'+minutes.toString : minutes } ${meridiem}`;
+    } else {
+
+        return `${hourFormatted < 10 ? '0'+hourFormatted.toString() : hourFormatted }:${minutes < 10 ? '0'+minutes.toString : minutes }` 
     }
 }

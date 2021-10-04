@@ -57,3 +57,6 @@ buck-out/
 
 # CocoaPods
 /ios/Pods/
+
+# Visual
+CronosMobileApp-WS.code-workspace

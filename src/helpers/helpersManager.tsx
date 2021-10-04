@@ -1,15 +1,19 @@
-import { getDateFromDateObj } from "./dateHelpers";
+import { getDateFromDateObj, dateFormatted } from './dateHelpers';
 import { hourActivityStructure } from "./hourActivityStructure";
 import { getActivitySpecs } from "./getActivitySpecs";
-import { getHourFromDateObj, getHourFromString } from "./timeHelpers";
+import { getHourFromDateObj, getHourFromString, timeFormatted } from './timeHelpers';
+import { hourErrorsValidation } from "./hourErrorsValidation";
 
 
 
 
 export {
     getDateFromDateObj,
+    timeFormatted,
     getHourFromDateObj,
     getHourFromString,
+    dateFormatted,
     getActivitySpecs,
-    hourActivityStructure
+    hourActivityStructure,
+    hourErrorsValidation
 }

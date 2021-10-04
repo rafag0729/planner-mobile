@@ -55,7 +55,7 @@ export const useActivityPetition = <T extends Function>( setShowModal: T ) => {
     }
 
 
-    /* Function to create an activity */
+    /* Function to save a new an activity in Firebase  */
     const createActivity = async(activity: Activity) => {
         moveToRight( 1 ) ;
 
