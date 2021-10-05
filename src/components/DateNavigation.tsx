@@ -2,7 +2,7 @@ import DateTimePicker, { AndroidEvent } from '@react-native-community/datetimepi
 import React, { useContext, useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
-import { AppContext } from '../context/AppContext';
+import { AppContext } from '../contexts/contextsManager';
 import { setDate } from '../reducer/appActions';
 import { CalendarIcon, NavigationArrow } from '../shared/assetsManager';
 import { colors, fontFamily } from '../styles/generalStyles';

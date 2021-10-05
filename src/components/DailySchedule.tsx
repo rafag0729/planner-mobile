@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 import { DayActivity } from '../interfaces/appInterfaces';
-import { AppContext } from '../context/AppContext';
+import { AppContext, ModalsContext } from '../contexts/contextsManager';
 import { ActivityNote } from './../shared/componentsManager';
 import { useActivityPetition } from '../hooks/hooksManager';
 import { hourActivityStructure } from '../helpers/helpersManager';
@@ -11,14 +11,12 @@ import { colors, fontFamily } from '../styles/generalStyles';
 
 
 
-interface Props {
-    setShowModal: ( value: boolean ) => void;
-}
 
-export const DailySchedule = ({ setShowModal }: Props) => {
+export const DailySchedule = () => {
 
     const { activities } = useContext(AppContext)
-    const { loadActivities } = useActivityPetition(() => {} )
+    const { setIsOpen, setModalType } = useContext(ModalsContext)
+    const { loadActivities } = useActivityPetition()
 
     const [activityPerHour, setActivityPerHour] = useState<DayActivity[]>([])
     
@@ -33,8 +31,9 @@ export const DailySchedule = ({ setShowModal }: Props) => {
     }, [activities])
 
     
-    const showingModal = () => {
-        setShowModal( true )
+    const showCreateModal = () => {
+        setModalType('create');
+        setIsOpen(true);
     }
 
     return (
@@ -53,10 +52,10 @@ export const DailySchedule = ({ setShowModal }: Props) => {
                             <Text style={ styles.textHour }>{ `${ hour }:00 ${hour > 12 ? 'pm' : 'am' }` }</Text>
                         </View>
                         <View style={{ flex: 2 }} >
-                            <TouchableOpacity style={{ flex: 1 }} onPress={ showingModal }/>
-                            <TouchableOpacity style={{ flex: 1 }} onPress={ showingModal }/>
-                            <TouchableOpacity style={{ flex: 1 }} onPress={ showingModal }/>
-                            <TouchableOpacity style={{ flex: 1 }} onPress={ showingModal }/>
+                            <TouchableOpacity style={{ flex: 1 }} onPress={ showCreateModal }/>
+                            <TouchableOpacity style={{ flex: 1 }} onPress={ showCreateModal }/>
+                            <TouchableOpacity style={{ flex: 1 }} onPress={ showCreateModal }/>
+                            <TouchableOpacity style={{ flex: 1 }} onPress={ showCreateModal }/>
 
                             {   activity.map(a => (
                                     <ActivityNote 

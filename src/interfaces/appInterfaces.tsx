@@ -69,6 +69,17 @@ export interface ProjectInterface {
 }
 
 
+// Modals
+export interface ModalsInterface {
+    open: boolean;
+    type: ModalTypes;
+    setIsOpen: (value: boolean) => void;
+    setModalType: (value: ModalTypes) => void;
+}
+
+export type ModalTypes = 'create' | 'edit' | 'delete' | null;
+
+
 /*  */
 export type SubmitType = 'creation' | 'edition' | 'delete';
 

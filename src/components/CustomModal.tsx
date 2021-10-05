@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Animated, Dimensions, KeyboardAvoidingView, Modal, Platform, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
+import { ModalsContext } from '../contexts/contextsManager';
 import { TimeSelector, CustomSelector, Loading, CustomAlert } from './../shared/componentsManager';
 import { useForm, useActivityPetition } from '../hooks/hooksManager';
-import { ModalType } from '../interfaces/appInterfaces';
 import { colors, fontFamily } from '../styles/generalStyles';
 
 
@@ -11,15 +11,11 @@ import { colors, fontFamily } from '../styles/generalStyles';
 
 const { width } = Dimensions.get('screen')
 
-interface Props {
-    type: ModalType;
-    visible: boolean;
-    setShowModal: (value: boolean) => void;
-}
+export const CustomModal = () => {
 
-export const CustomModal = ({ type, visible, setShowModal }: Props) => {
+    const { open, setIsOpen, setModalType, type } = useContext(ModalsContext)
 
-    const { modalPosition, respType, submitActivity } = useActivityPetition( setShowModal )
+    const { modalPosition, respType, submitActivity } = useActivityPetition()
     const { formValues, projectName, activityType, description, startTime, endTime, resetForm, settingHour, handleInputChange } = useForm({
         id: null,
         projectName: '',
@@ -29,12 +25,17 @@ export const CustomModal = ({ type, visible, setShowModal }: Props) => {
         endTime: '--:-- am/pm',
         day: ''
     })
+
+    const cancelModals = () => {
+        setModalType( null );
+        setIsOpen( false );
+    }
     
     return (
         <Modal
             animationType="slide"
-            visible={ visible }
-            onRequestClose={ () => setShowModal( false ) }
+            visible={ open }
+            onRequestClose={ cancelModals }
             > 
             
             {/* All modals screen container */}
@@ -57,7 +58,7 @@ export const CustomModal = ({ type, visible, setShowModal }: Props) => {
                         showsVerticalScrollIndicator={ false }
                         >
                         <Text style={ styles.modalHeader }>
-                            { type === 'creation' ? 'Crear actividad' : 'Editar actividad'}
+                            { type === 'create' ? 'Crear actividad' : 'Editar actividad'}
                         </Text>
 
                         {/* Name of the activity */}
@@ -110,7 +111,7 @@ export const CustomModal = ({ type, visible, setShowModal }: Props) => {
                         <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', marginTop: 40, marginBottom: 40 }}>
                             <TouchableOpacity
                                 style={ styles.modalButton }
-                                onPress={ () => setShowModal( false ) }
+                                onPress={ cancelModals }
                                 >
                                 <Text style={ styles.textButton } >Cancelar</Text>
                             </TouchableOpacity>

@@ -1,6 +1,6 @@
 import { NavigationContainer } from '@react-navigation/native';
 import React from 'react';
-import { AppContextProvider } from './src/context/AppContext';
+import { AppContextProvider } from './src/contexts/contextsManager';
 
 import { Header } from './src/shared/componentsManager';
 import { Navigator } from './src/shared/screensManager';

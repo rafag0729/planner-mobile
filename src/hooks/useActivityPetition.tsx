@@ -3,12 +3,12 @@ import { useContext, useState } from "react"
 
 import { Activity, RespType} from '../interfaces/appInterfaces';
 import { addNewActivity, loadDBActivities } from '../reducer/appActions';
-import { AppContext } from '../context/AppContext';
+import { AppContext } from '../contexts/contextsManager';
 import { useMoveModalAnimation } from "./hooksManager";
 import { getDateFromDateObj } from '../helpers/dateHelpers';
 
 
-export const useActivityPetition = <T extends Function>( setShowModal: T ) => {
+export const useActivityPetition = ( ) => {
 
     /* Dispatcher of reducer state */
     const { daySelected, dispatcher }  = useContext(AppContext)
@@ -69,7 +69,7 @@ export const useActivityPetition = <T extends Function>( setShowModal: T ) => {
                 moveToRight( 2 )
 
                 setTimeout(() => {
-                    setShowModal( false )
+                    /* setShowModal( false ) */
                     moveToRight( 0 )
                 }, 1500)
             }, 1500)
@@ -82,7 +82,7 @@ export const useActivityPetition = <T extends Function>( setShowModal: T ) => {
                 moveToRight( 2 )
 
                 setTimeout(() => {
-                    setShowModal( false )
+                    /* setShowModal( false ) */
                     moveToRight( 0 )
                 }, 1500)
             }, 1500)
