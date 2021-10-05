@@ -32,7 +32,7 @@ export const getHourFromString = (time: string): TimeSpecs => {
     
 }
 
-export const timeFormatted = ({ hour, minutes, seconds, meridiem }: TimeSpecs, militaryHours: boolean = true): string => {
+export const timeFormatted = ({ hour, minutes, meridiem }: TimeSpecs, militaryHours: boolean = true): string => {
 
     let hourFormatted = hour;
 
@@ -42,9 +42,9 @@ export const timeFormatted = ({ hour, minutes, seconds, meridiem }: TimeSpecs, m
             hourFormatted = Number(hour) - 12;
         }
 
-        return `${hourFormatted < 10 ? '0'+hourFormatted.toString() : hourFormatted }:${minutes < 10 ? '0'+minutes.toString : minutes } ${meridiem}`;
+        return `${hourFormatted < 10 ? '0'+hourFormatted.toString() : hourFormatted }:${minutes < 10 ? '0'+minutes.toString() : minutes } ${meridiem}`;
     } else {
 
-        return `${hourFormatted < 10 ? '0'+hourFormatted.toString() : hourFormatted }:${minutes < 10 ? '0'+minutes.toString : minutes }` 
+        return `${hourFormatted < 10 ? '0'+hourFormatted.toString() : hourFormatted }:${minutes < 10 ? '0'+minutes.toString() : minutes }` 
     }
 }

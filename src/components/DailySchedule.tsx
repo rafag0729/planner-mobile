@@ -1,13 +1,13 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
-import { ActivityNote } from './../shared/componentsManager';
+import { DayActivity } from '../interfaces/appInterfaces';
 import { AppContext } from '../context/AppContext';
-import { useActivityPetition } from '../hooks/useActivityPetition';
+import { ActivityNote } from './../shared/componentsManager';
+import { useActivityPetition } from '../hooks/hooksManager';
 import { hourActivityStructure } from '../helpers/helpersManager';
 import { militaryHours } from '../data/dateTimeData';
 import { colors, fontFamily } from '../styles/generalStyles';
-import { DayActivity } from '../interfaces/appInterfaces';
 
 
 
