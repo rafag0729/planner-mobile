@@ -45,14 +45,12 @@ export const ActivityNote = ({ activity }: Props) => {
 const activityStyles = StyleSheet.create({
     container: {
         backgroundColor: 'red',
-        height: 100,
         position: 'absolute',
-        top: 25,
-        right: 10,
-        left: 10,
+        right: 5,
+        left: 5,
         padding: 3,
         zIndex: 999,
-        elevation: 100
+        elevation: 999,
     },
     textFormat: {
         color: 'white',

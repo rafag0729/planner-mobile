@@ -3,7 +3,7 @@ import { useContext, useState } from "react"
 
 import { Activity, RespType} from '../interfaces/appInterfaces';
 import { addNewActivity, loadDBActivities } from '../reducer/appActions';
-import { AppContext } from '../contexts/contextsManager';
+import { AppContext, ModalsContext } from '../contexts/contextsManager';
 import { useMoveModalAnimation } from "./hooksManager";
 import { getDateFromDateObj } from '../helpers/dateHelpers';
 
@@ -12,6 +12,7 @@ export const useActivityPetition = ( ) => {
 
     /* Dispatcher of reducer state */
     const { daySelected, dispatcher }  = useContext(AppContext)
+    const { setIsOpen } = useContext(ModalsContext)
 
     /* Hook for animating modal */
     const { modalPosition, moveToRight } = useMoveModalAnimation()
@@ -69,7 +70,7 @@ export const useActivityPetition = ( ) => {
                 moveToRight( 2 )
 
                 setTimeout(() => {
-                    /* setShowModal( false ) */
+                    setIsOpen( false );
                     moveToRight( 0 )
                 }, 1500)
             }, 1500)
@@ -82,7 +83,7 @@ export const useActivityPetition = ( ) => {
                 moveToRight( 2 )
 
                 setTimeout(() => {
-                    /* setShowModal( false ) */
+                    setIsOpen( false );
                     moveToRight( 0 )
                 }, 1500)
             }, 1500)
