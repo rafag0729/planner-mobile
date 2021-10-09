@@ -16,14 +16,10 @@ export const DailySchedule = () => {
 
     const { activities } = useContext(AppContext)
     const { setIsOpen, setModalType } = useContext(ModalsContext)
-    const { loadActivities } = useActivityPetition()
-
+    useActivityPetition()
     const [activityPerHour, setActivityPerHour] = useState<DayActivity[]>([])
     
-    useEffect(() => {
-        loadActivities();
-    }, [])
-
+    
     /* Building structure of the hour and activity */
     useEffect(() => {
         const structure = hourActivityStructure( militaryHours, activities )
@@ -64,10 +60,9 @@ export const DailySchedule = () => {
                                         />  
                                 ))
                             }
-                            
                         </View>
                     </View>
-                    )) 
+                )) 
             }
 
         </ScrollView>
@@ -75,7 +70,6 @@ export const DailySchedule = () => {
 }
 
 const styles = StyleSheet.create({
-    
     calendarHourContainer: {
         position: 'relative',
         zIndex: 0,

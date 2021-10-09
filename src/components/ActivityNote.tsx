@@ -16,23 +16,26 @@ export const ActivityNote = ({ activity }: Props) => {
 
     const [position, setPosition] = useState<number>(0);
     const [length, setLength] = useState<number>(0);
-
+    
     useEffect(() => {
         const [ position, length ] = getActivitySpecs( activity );
         setLength( length );
         setPosition( position );
     }, [])
+    
 
     return (
         <View style={{ 
             ...activityStyles.container,
             top: 25 * position,
-            height: length * 25
+            height: length * 25,
+            backgroundColor: activity.projectName.color
             }} >
             <View style={{ flex: 1}}>
-                <Text style={{ ...activityStyles.textFormat, fontFamily: fontFamily.bold }}> { activity.projectName } </Text>
-                <Text style={{ ...activityStyles.textFormat, fontFamily: fontFamily.bold }}> { activity.activityType }: </Text>
-                <Text style={{ ...activityStyles.textFormat, fontFamily: fontFamily.regular }}> { activity.description } </Text>
+                <Text style={{ ...activityStyles.textFormat, fontFamily: fontFamily.bold }}>{ activity.projectName.name } </Text>
+                <Text style={{ ...activityStyles.textFormat, fontFamily: fontFamily.bold }}>{ activity.activityType.name }: 
+                    <Text style={{ ...activityStyles.textFormat, fontFamily: fontFamily.regular }}> { activity.description } </Text>
+                </Text>
             </View>
             <View style={ activityStyles.actionsPosition }>
                 <EditIcon size={ 22 } />
@@ -44,18 +47,18 @@ export const ActivityNote = ({ activity }: Props) => {
 
 const activityStyles = StyleSheet.create({
     container: {
-        backgroundColor: 'red',
+        backgroundColor: 'grey',
         position: 'absolute',
         right: 5,
         left: 5,
-        padding: 3,
+        padding: 5,
         zIndex: 999,
         elevation: 999,
     },
     textFormat: {
         color: 'white',
         fontSize: 14,
-        marginVertical: -2
+        marginLeft: 5
     },
     actionsPosition: {
         flexDirection: 'row', 

@@ -90,7 +90,7 @@ export const CustomModal = () => {
                             value={ description }
                             />
 
-                        {/* Time frame of the activities */}
+                        {/* Time range of the activities */}
                         <Text style={ styles.modalText } >Desde - hasta</Text>
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }} >
                             <TimeSelector 

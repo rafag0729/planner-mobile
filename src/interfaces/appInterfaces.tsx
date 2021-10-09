@@ -12,8 +12,8 @@ export type AppActions =
     | { type: 'Set date', payload: Date }
     | { type: 'Set initial hour', payload: string }
     | { type: 'Load activities', payload: Activity[] }
-    | { type: 'Add a new activity', payload: Activity }
-    | { type: 'Update an activity', payload: Activity }
+    | { type: 'Add a new activity', payload: ActivityToSubmit }
+    | { type: 'Update an activity', payload: ActivityToSubmit }
     | { type: 'Remove activity', payload: string }
 
 
@@ -38,8 +38,8 @@ export type TimeSpecs = {
 
 export interface Activity {
     id?: string | null;
-    projectName: string;
-    activityType: string;
+    projectName: ProjectInterface;
+    activityType: ProjectInterface;
     description: string;
     startTime: string;
     endTime: string;
@@ -51,6 +51,15 @@ export interface DayActivity {
     activity: Activity[]
 }
 
+export interface ActivityToSubmit {
+    id?: string | null;
+    projectName: string;
+    activityType: string;
+    description: string;
+    startTime: string;
+    endTime: string;
+    day: string;
+}
 
 // User
 
@@ -64,7 +73,7 @@ export interface User {
 
 export interface ProjectInterface {
     id: string;
-    name: string
+    name: string;
     color?: string; 
 }
 

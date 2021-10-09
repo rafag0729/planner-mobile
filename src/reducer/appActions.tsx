@@ -1,4 +1,4 @@
-import { AppActions, Activity } from '../interfaces/appInterfaces';
+import { AppActions, Activity, ActivityToSubmit } from '../interfaces/appInterfaces';
 
 
 
@@ -19,7 +19,7 @@ export const loadDBActivities = ( activities: Activity[]): AppActions => {
 }
 
 
-export const addNewActivity = ( activity: Activity): AppActions => {
+export const addNewActivity = ( activity: ActivityToSubmit): AppActions => {
     return {
         type: 'Add a new activity',
         payload: activity
