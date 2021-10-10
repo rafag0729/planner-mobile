@@ -13,7 +13,8 @@ export const colors = {
     darkBlue: '#0f1055ff',
     lightGrey: 'rgba(203, 203, 203, .7)',
     regularGrey: '#cbcbcbff',
-    customRed: '#e92727'
+    customRed: '#e92727',
+    customGreen: '#00d657ff'
 }
 
 export const fontFamily = {

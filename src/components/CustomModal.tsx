@@ -1,8 +1,9 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { Animated, Dimensions, KeyboardAvoidingView, Modal, Platform, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
+import { AlertMsgInterface } from '../interfaces/appInterfaces';
 import { ModalsContext } from '../contexts/contextsManager';
-import { TimeSelector, CustomSelector, Loading, CustomAlert } from './../shared/componentsManager';
+import { TimeSelector, CustomSelector, Loading, CustomAlert, AlertMessage } from './../shared/componentsManager';
 import { useForm, useActivityPetition } from '../hooks/hooksManager';
 import { colors, fontFamily } from '../styles/generalStyles';
 
@@ -14,7 +15,6 @@ const { width } = Dimensions.get('screen')
 export const CustomModal = () => {
 
     const { open, setIsOpen, setModalType, type } = useContext(ModalsContext)
-
     const { modalPosition, respType, submitActivity } = useActivityPetition()
     const { formValues, projectName, activityType, description, startTime, endTime, resetForm, settingHour, handleInputChange } = useForm({
         id: null,
@@ -24,6 +24,12 @@ export const CustomModal = () => {
         startTime: '--:-- am/pm',
         endTime: '--:-- am/pm',
         day: ''
+    })
+    const [alert, setAlert] = useState<AlertMsgInterface>({
+        message: '',
+        type: null,
+        open: false,
+        setAlertMsg: () => {}
     })
 
     const cancelModals = () => {
@@ -37,6 +43,16 @@ export const CustomModal = () => {
             visible={ open }
             onRequestClose={ cancelModals }
             > 
+
+            {   alert.open && (
+                    <AlertMessage
+                        type={ alert.type }
+                        message={ alert.message }
+                        setAlertMsg={(obj: AlertMsgInterface) => setAlert(obj) }
+                        />
+                )
+            }
+            
             
             {/* All modals screen container */}
             <Animated.View
@@ -121,8 +137,7 @@ export const CustomModal = () => {
                                     style={ styles.modalButton }
                                     activeOpacity={ ( !projectName || !activityType ) ? 1 : .6 }
                                     onPress={ () => {
-                                        if ( !projectName || !activityType ) return null;                                        
-                                        
+                                        if ( !projectName || !activityType ) return null;
                                         submitActivity({ ...formValues })
                                         resetForm();
                                     }}

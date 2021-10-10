@@ -61,10 +61,10 @@ export const useActivityPetition = ( ) => {
     const submitActivity = (activity: ActivityToSubmit) => {
         if(!activity.id){
             /* If no activityId, this will be a creation petition */
-            const { day, month, year } = getDateFromDateObj(daySelected)
+            const { day, monthNumber, year } = getDateFromDateObj(daySelected)
             createActivity({ 
                 ...activity, 
-                day: `${day}-${month}-${year}`
+                day: `${day}-${monthNumber}-${year}`
             });
         } else {
             updateActivity(activity);
