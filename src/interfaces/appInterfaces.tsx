@@ -21,7 +21,8 @@ export type AppActions =
 export type DateSpecs = {
     day: number;
     dayName: String;
-    month: string;
+    monthNumber: number;
+    monthName: string;
     year: number;
 }
 

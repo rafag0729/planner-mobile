@@ -8,19 +8,21 @@ export const getDateFromDateObj = ( date: Date ): DateSpecs => {
 
     const day = date.getDate();
     const dayName = daysOfWeek[date.getDay()];
-    const month = months[date.getMonth()];
+    const monthNumber = date.getMonth();
+    const monthName = months[date.getMonth()];
     const year = date.getFullYear();
 
     return {
         day,
         dayName,
-        month,
+        monthNumber,
+        monthName,
         year
     }
 }
 
-export const dateFormatted = ({ day, month, year}: DateSpecs): string => {
+export const dateFormatted = ({ day, monthNumber, year}: DateSpecs): string => {
 
-    return `${day}-${month}-${year}`;
+    return `${day}-${monthNumber}-${year}`;
 }
 

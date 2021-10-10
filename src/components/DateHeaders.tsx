@@ -14,14 +14,13 @@ export const DateHeaders = () => {
     const { daySelected } = useContext(AppContext)
     const [ date, setDate] = useState<DateSpecs>( getDateFromDateObj( new Date() ))
 
-    useEffect(() => {
-        
-        const { day, dayName, month, year } = getDateFromDateObj( daySelected );
+    useEffect(() => {   
+        const { day, dayName, monthName, year } = getDateFromDateObj( daySelected );
         setDate({
             ...date,
             day,
             dayName,
-            month,
+            monthName,
             year
         })
 
@@ -29,7 +28,7 @@ export const DateHeaders = () => {
 
     return (
         <View>
-            <Text style={ styles.mainTextHead }>{ date.month } { date.year }</Text>
+            <Text style={ styles.mainTextHead }>{ date.monthName } { date.year }</Text>
             <Text style={ styles.subTextHead }>{ date.dayName } { date.day }</Text>
         </View>
     )

@@ -6,7 +6,7 @@ import { AppContext } from '../contexts/contextsManager';
 import { setDate } from '../reducer/appActions';
 import { CalendarIcon, NavigationArrow } from '../shared/assetsManager';
 import { colors, fontFamily } from '../styles/generalStyles';
-
+import { getDateFromDateObj } from '../helpers/dateHelpers';
 
 
 
@@ -16,6 +16,7 @@ export const DateNavigation = () => {
     const { daySelected, dispatcher } = useContext(AppContext)
     const [ pickerStatus, setPickerStatus ] = useState<boolean>(false)    
 
+
     /* Updating date based on picker */
     const handleDateChange = ( date: Date | undefined ) => {
         if(date){
@@ -24,6 +25,14 @@ export const DateNavigation = () => {
         setPickerStatus( false );
     }
 
+    const handleDateChangeByArrow = (operation: 'add' | 'subtract') => {
+        let { day, monthNumber, year } = getDateFromDateObj( daySelected );
+        operation === 'add' ? day++ : day--;
+
+        const date = new Date(year, monthNumber, day);
+        
+        dispatcher( setDate( date ) )
+    }
     
     return (
         <>
@@ -36,16 +45,20 @@ export const DateNavigation = () => {
 
                 <View style={{ flexDirection: 'row', alignItems: 'center'}}>
                     <TouchableOpacity
-                        onPress={ () => setPickerStatus( false )}
+                        onPress={ () => handleDateChangeByArrow('subtract') }
                         >
                         <NavigationArrow 
                             direction='left'
                             style={ dateNavigatioStyles.dateNavigationItems } />
                     </TouchableOpacity>
                     <Text style={{ ...dateNavigatioStyles.dateNavigationItems, ...dateNavigatioStyles.textDateNavigation }}>Hoy</Text>
-                    <NavigationArrow 
-                        direction='rigth'
-                        style={ dateNavigatioStyles.dateNavigationItems } />
+                    <TouchableOpacity
+                        onPress={ () => handleDateChangeByArrow('add') }
+                        >
+                        <NavigationArrow 
+                            direction='rigth'
+                            style={ dateNavigatioStyles.dateNavigationItems } />
+                    </TouchableOpacity>
                 </View>
             </View>
 
