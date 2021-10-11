@@ -10,6 +10,13 @@ export const setDate = ( date: Date): AppActions => {
     }
 }
 
+export const setDateTimeToModal = ( date: string, startTime: string ): AppActions => {
+    return {
+        type: 'Add date-startTime  to Modal',
+        payload: { date, startTime }
+    }
+}
+
 
 export const loadDBActivities = ( activities: Activity[]): AppActions => {
     return {

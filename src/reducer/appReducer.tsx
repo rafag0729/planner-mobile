@@ -11,6 +11,16 @@ export const appReducer = ( state: AppContextInterface, action: AppActions ): Ap
                 daySelected: action.payload
             }
 
+        case 'Add date-startTime  to Modal':
+            return {
+                ...state,
+                dateTimeToModal: {
+                    ...state.dateTimeToModal,
+                    dateM: action.payload.date,
+                    startTimeM: action.payload.startTime
+                }
+            }
+
         case 'Load activities':
             return {
                 ...state,

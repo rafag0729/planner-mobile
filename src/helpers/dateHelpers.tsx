@@ -23,6 +23,6 @@ export const getDateFromDateObj = ( date: Date ): DateSpecs => {
 
 export const dateFormatted = ({ day, monthNumber, year}: DateSpecs): string => {
 
-    return `${day}-${monthNumber}-${year}`;
+    return `${day}-${monthNumber+1}-${year}`;
 }
 

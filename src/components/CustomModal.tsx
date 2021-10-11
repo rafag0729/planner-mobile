@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Animated, Dimensions, KeyboardAvoidingView, Modal, Platform, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
 import { AlertMsgInterface } from '../interfaces/appInterfaces';
-import { ModalsContext } from '../contexts/contextsManager';
+import { AppContext, ModalsContext } from '../contexts/contextsManager';
 import { TimeSelector, CustomSelector, Loading, CustomAlert, AlertMessage } from './../shared/componentsManager';
 import { useForm, useActivityPetition } from '../hooks/hooksManager';
 import { hourErrorsValidation } from '../helpers/helpersManager';
@@ -15,6 +15,7 @@ const { width } = Dimensions.get('screen')
 
 export const CustomModal = () => {
 
+    const { dateTimeToModal } = useContext(AppContext)
     const { open, setIsOpen, setModalType, type } = useContext(ModalsContext)
     const { modalPosition, respType, submitActivity } = useActivityPetition()
     const { formValues, setFormValues, resetForm, settingHour, handleInputChange } = useForm({
@@ -22,9 +23,9 @@ export const CustomModal = () => {
         projectName: '',
         activityType: '',
         description: '',
-        startTime: '--:-- am/pm',
-        endTime: '--:-- am/pm',
-        day: ''
+        day: dateTimeToModal.dateM,
+        startTime: dateTimeToModal.startTimeM,
+        endTime: '--:-- am/pm'
     })
     const [alert, setAlert] = useState<AlertMsgInterface>({
         message: '',
@@ -51,10 +52,17 @@ export const CustomModal = () => {
         }
     }, [formValues.startTime, formValues.endTime])
 
+    useEffect(() => {
+        setFormValues({
+            ...formValues,
+            day: dateTimeToModal.dateM,
+            startTime: dateTimeToModal.startTimeM
+        })
+    }, [dateTimeToModal])
+
 
     const validatePetition = () => {
-        if ( !formValues.projectName || !formValues.activityType || formValues.startTime === '--:-- am/pm' 
-        ||  formValues.endTime === '--:-- am/pm'){
+        if ( !formValues.projectName || !formValues.activityType || formValues.startTime === '--:-- am/pm' ||  formValues.endTime === '--:-- am/pm'){
             setAlert({
                 ...alert,
                 message: 'Por favor, primero llena los espacios requeridos para hacer la petición', 

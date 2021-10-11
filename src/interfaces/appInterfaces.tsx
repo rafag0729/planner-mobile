@@ -2,19 +2,27 @@
 
 export interface AppContextInterface {
     daySelected: Date;
+    dateTimeToModal: {
+        dateM: string;
+        startTimeM: string;
+    };
     activities: Activity[];
     activitySelected: Activity | null;
+    view: 'M' | 'W' | 'D';
     user?: User;
     dispatcher?: any
 }
 
 export type AppActions = 
     | { type: 'Set date', payload: Date }
-    | { type: 'Set initial hour', payload: string }
+    
     | { type: 'Load activities', payload: Activity[] }
     | { type: 'Add a new activity', payload: ActivityToSubmit }
     | { type: 'Update an activity', payload: ActivityToSubmit }
     | { type: 'Remove activity', payload: string }
+
+    | { type: 'Add date-startTime  to Modal', payload: { date: string, startTime: string} }
+    
 
 
 // Dates
@@ -27,7 +35,6 @@ export type DateSpecs = {
 }
 
 // Hour Obj
-
 export type TimeSpecs = {
     hour: number | string;
     minutes: number | string,
@@ -36,7 +43,6 @@ export type TimeSpecs = {
 }
 
 // Activities
-
 export interface Activity {
     id?: string | null;
     projectName: ProjectInterface;
@@ -63,7 +69,6 @@ export interface ActivityToSubmit {
 }
 
 // User
-
 export interface User {
     userName: string;
     id: string,
@@ -71,7 +76,6 @@ export interface User {
 }
 
 // ProjectName and ProjectType
-
 export interface ProjectInterface {
     id: string;
     name: string;

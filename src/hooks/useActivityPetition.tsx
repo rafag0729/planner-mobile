@@ -5,10 +5,10 @@ import { Activity, ProjectInterface, RespType, ActivityToSubmit } from '../inter
 import { addNewActivity, loadDBActivities } from '../reducer/appActions';
 import { AppContext, ModalsContext } from '../contexts/contextsManager';
 import { useMoveModalAnimation } from "./hooksManager";
-import { getDateFromDateObj } from '../helpers/dateHelpers';
 
 
-export const useActivityPetition = ( ) => {
+
+export const useActivityPetition = () => {
 
     const { daySelected, dispatcher }  = useContext(AppContext)
     const { setIsOpen } = useContext(ModalsContext)
@@ -29,7 +29,7 @@ export const useActivityPetition = ( ) => {
             let activities: Activity[] = [];
 
             /* First getting and extracting all project assets and activities */
-            const respActivities = await firestore().collection('users/vC37t4OJ5DWQ7yPvf3RC/activities').get();
+            const respActivities = await firestore().collection('users/vC37t4OJ5DWQ7yPvf3RC/activities').where('day','==','').get();
             const respProjects = await firestore().collection('projects').get();
             const respProjectTypes = await firestore().collection('projectTypes').get();
 
@@ -59,16 +59,7 @@ export const useActivityPetition = ( ) => {
 
     /* Function to choose either between a creation or upload petition */
     const submitActivity = (activity: ActivityToSubmit) => {
-        if(!activity.id){
-            /* If no activityId, this will be a creation petition */
-            const { day, monthNumber, year } = getDateFromDateObj(daySelected)
-            createActivity({ 
-                ...activity, 
-                day: `${day}-${monthNumber}-${year}`
-            });
-        } else {
-            updateActivity(activity);
-        }
+        !activity.id ? createActivity({ ...activity }) : updateActivity(activity)
     }
 
 
