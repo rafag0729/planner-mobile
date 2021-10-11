@@ -1,5 +1,5 @@
 import DateTimePicker, { AndroidEvent } from '@react-native-community/datetimepicker';
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 import { AppContext } from '../contexts/contextsManager';
@@ -15,7 +15,20 @@ export const DateNavigation = () => {
 
     const { daySelected, dispatcher } = useContext(AppContext)
     const [ pickerStatus, setPickerStatus ] = useState<boolean>(false)    
+    const [todayStatus, setTodayStatus] = useState<boolean>(false)
 
+    useEffect(() => {
+        checkingTodayEquality();
+    }, [daySelected])
+
+
+    const checkingTodayEquality = () => {
+        const dateState = daySelected;
+        const actualDate = new Date();
+        const dateStateFormatted = new Date(dateState.getFullYear(), dateState.getMonth(), dateState.getDate()).getTime();
+        const actualDateFormatted = new Date(actualDate.getFullYear(), actualDate.getMonth(), actualDate.getDate()).getTime();
+        ( dateStateFormatted === actualDateFormatted ) ? setTodayStatus(true) : setTodayStatus(false);
+    }
 
     /* Updating date based on picker */
     const handleDateChange = ( date: Date | undefined ) => {
@@ -28,15 +41,13 @@ export const DateNavigation = () => {
     const handleDateChangeByArrow = (operation: 'add' | 'subtract') => {
         let { day, monthNumber, year } = getDateFromDateObj( daySelected );
         operation === 'add' ? day++ : day--;
-
         const date = new Date(year, monthNumber, day);
-        
         dispatcher( setDate( date ) )
     }
     
     return (
         <>
-            <View style={ dateNavigatioStyles.dateNavigation }>
+            <View style={ styles.dateNavigation }>
                 <TouchableOpacity
                     onPress={ () => setPickerStatus( true ) }
                     >
@@ -45,19 +56,29 @@ export const DateNavigation = () => {
 
                 <View style={{ flexDirection: 'row', alignItems: 'center'}}>
                     <TouchableOpacity
+                        style={ styles.dateNavigationItems } 
                         onPress={ () => handleDateChangeByArrow('subtract') }
                         >
                         <NavigationArrow 
                             direction='left'
-                            style={ dateNavigatioStyles.dateNavigationItems } />
+                            />
                     </TouchableOpacity>
-                    <Text style={{ ...dateNavigatioStyles.dateNavigationItems, ...dateNavigatioStyles.textDateNavigation }}>Hoy</Text>
                     <TouchableOpacity
+                        style={{ 
+                            ...styles.todayContainer,
+                            backgroundColor: todayStatus ? colors.lightBlue : 'transparent'
+                        }}
+                        onPress={ () => handleDateChange(new Date()) }
+                        >
+                        <Text style={{ ...styles.textDateNavigation, color: todayStatus ? 'white' : colors.lightBlue }}>Hoy</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style={ styles.dateNavigationItems } 
                         onPress={ () => handleDateChangeByArrow('add') }
                         >
                         <NavigationArrow 
                             direction='rigth'
-                            style={ dateNavigatioStyles.dateNavigationItems } />
+                            />
                     </TouchableOpacity>
                 </View>
             </View>
@@ -76,18 +97,25 @@ export const DateNavigation = () => {
     )
 }
 
-const dateNavigatioStyles = StyleSheet.create({
+const styles = StyleSheet.create({
     dateNavigation: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center'
     },
     dateNavigationItems: {
-        marginHorizontal: 7
+        marginHorizontal: 3
     },
     textDateNavigation: {
         fontFamily: fontFamily.regular,
         color: colors.primaryBlue,
-        fontSize: 17
+        fontSize: 17,
+        textAlign: 'center'
     },
+    todayContainer: {
+        justifyContent: 'center',
+        marginHorizontal: 3,
+        width: 50,
+        borderRadius: 5
+    }
 });
