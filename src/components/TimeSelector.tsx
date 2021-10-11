@@ -34,7 +34,7 @@ export const TimeSelector = ({ settingHour, timerText, text}: Props) => {
                     minuteInterval={ 15 }
                     value={ new Date() }
                     onChange={ (e: AndroidEvent, date: Date | undefined) => {
-                        settingHour( date, timerText);
+                        settingHour( date, timerText );
                         setPickerStatus( false );
                     }}
                     />

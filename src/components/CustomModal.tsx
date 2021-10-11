@@ -1,10 +1,11 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Animated, Dimensions, KeyboardAvoidingView, Modal, Platform, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
 import { AlertMsgInterface } from '../interfaces/appInterfaces';
 import { ModalsContext } from '../contexts/contextsManager';
 import { TimeSelector, CustomSelector, Loading, CustomAlert, AlertMessage } from './../shared/componentsManager';
 import { useForm, useActivityPetition } from '../hooks/hooksManager';
+import { hourErrorsValidation } from '../helpers/helpersManager';
 import { colors, fontFamily } from '../styles/generalStyles';
 
 
@@ -16,7 +17,7 @@ export const CustomModal = () => {
 
     const { open, setIsOpen, setModalType, type } = useContext(ModalsContext)
     const { modalPosition, respType, submitActivity } = useActivityPetition()
-    const { formValues, projectName, activityType, description, startTime, endTime, resetForm, settingHour, handleInputChange } = useForm({
+    const { formValues, setFormValues, resetForm, settingHour, handleInputChange } = useForm({
         id: null,
         projectName: '',
         activityType: '',
@@ -31,6 +32,41 @@ export const CustomModal = () => {
         open: false,
         setAlertMsg: () => {}
     })
+
+    useEffect(() => {
+        if( formValues.startTime !== '--:-- am/pm' && formValues.endTime !== '--:-- am/pm'){
+            const { valid, message } = hourErrorsValidation( formValues.startTime, formValues.endTime )
+            if(!valid){
+                setAlert({
+                    ...alert,
+                    type: 'error',
+                    open: true,
+                    message,
+                })
+                setFormValues({
+                    ...formValues,
+                    endTime: '--:-- am/pm'
+                })
+            }
+        }
+    }, [formValues.startTime, formValues.endTime])
+
+
+    const validatePetition = () => {
+        if ( !formValues.projectName || !formValues.activityType || formValues.startTime === '--:-- am/pm' 
+        ||  formValues.endTime === '--:-- am/pm'){
+            setAlert({
+                ...alert,
+                message: 'Por favor, primero llena los espacios requeridos para hacer la petición', 
+                type: 'error',
+                open: true,
+            })
+            return null;
+        }
+        submitActivity({ ...formValues })
+        resetForm();
+    }
+
 
     const cancelModals = () => {
         setModalType( null );
@@ -83,7 +119,7 @@ export const CustomModal = () => {
                             dataType='projects'
                             field="projectName"
                             getInputValue={ (value: string, field: 'projectName' | 'activityType' ) => handleInputChange( value, field ) }
-                            textValue={ projectName }
+                            textValue={ formValues.projectName }
                             />
 
                         {/* Type of the activity */}
@@ -92,7 +128,7 @@ export const CustomModal = () => {
                             dataType='projectTypes'
                             field="activityType"
                             getInputValue={ (value: string, field: 'projectName' | 'activityType' ) => handleInputChange( value, field ) }
-                            textValue={ activityType }
+                            textValue={ formValues.activityType }
                             />
 
                         {/* Description of the activity */}
@@ -103,20 +139,20 @@ export const CustomModal = () => {
                             multiline
                             numberOfLines={ 4 }
                             onChangeText={ (value: string) => handleInputChange( value, 'description')}
-                            value={ description }
+                            value={ formValues.description }
                             />
 
                         {/* Time range of the activities */}
                         <Text style={ styles.modalText } >Desde - hasta</Text>
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }} >
                             <TimeSelector 
-                                text={ startTime }
+                                text={ formValues.startTime }
                                 settingHour={ settingHour }
                                 timerText='startTime'
                                 />
                                 
                             <TimeSelector 
-                                text={ endTime }
+                                text={ formValues.endTime }
                                 settingHour={ settingHour }
                                 timerText='endTime'
                                 />
@@ -132,15 +168,11 @@ export const CustomModal = () => {
                                 <Text style={ styles.textButton } >Cancelar</Text>
                             </TouchableOpacity>
 
-                            <View style={{ opacity: (!projectName || !activityType) ? .5 : 1 }}>
+                            <View style={{ opacity: (!formValues.projectName || !formValues.activityType) ? .5 : 1 }}>
                                 <TouchableOpacity
                                     style={ styles.modalButton }
-                                    activeOpacity={ ( !projectName || !activityType ) ? 1 : .6 }
-                                    onPress={ () => {
-                                        if ( !projectName || !activityType ) return null;
-                                        submitActivity({ ...formValues })
-                                        resetForm();
-                                    }}
+                                    activeOpacity={ ( !formValues.projectName || !formValues.activityType ) ? 1 : .6 }
+                                    onPress={ validatePetition }
                                     >
                                     <Text style={ styles.textButton } >Aceptar</Text>
                                 </TouchableOpacity>
