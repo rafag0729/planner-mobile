@@ -8,10 +8,14 @@ import { appReducer } from '../reducer/appReducer';
 
 const initialValues: AppContextInterface = {
     daySelected: new Date(),
+    dateTimeToModal: {
+        dateM: '',
+        startTimeM: '',
+    },
     activities: [],
-    activitySelected: null
+    activitySelected: null,
+    view: 'D',
 }
-
 
 export const AppContext = createContext<AppContextInterface>( initialValues )
 

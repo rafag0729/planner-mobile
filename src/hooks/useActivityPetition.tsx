@@ -1,38 +1,35 @@
 import firestore from '@react-native-firebase/firestore';
-import { useContext, useEffect, useRef, useState } from "react"
+import { useContext, useRef, useState } from "react"
 
 import { Activity, ProjectInterface, RespType, ActivityToSubmit } from '../interfaces/appInterfaces';
 import { addNewActivity, loadDBActivities } from '../reducer/appActions';
 import { AppContext, ModalsContext } from '../contexts/contextsManager';
 import { useMoveModalAnimation } from "./hooksManager";
+import { dateFormatted, getDateFromDateObj } from '../helpers/helpersManager';
 
 
 
 export const useActivityPetition = () => {
 
-    const { daySelected, dispatcher }  = useContext(AppContext)
-    const { setIsOpen } = useContext(ModalsContext)
-    const { modalPosition, moveToRight } = useMoveModalAnimation()
-    const projects = useRef<ProjectInterface[]>([]);
-    const projectTypes = useRef<ProjectInterface[]>([])
-    const [respType, setRespType] = useState<RespType>('failed')
-
-    
-    useEffect(() => {
-        loadActivities();
-    }, [])
-
+    const { daySelected, dispatcher }  = useContext(AppContext);
+    const { setIsOpen } = useContext(ModalsContext);
+    const { modalPosition, moveToRight } = useMoveModalAnimation();
+    const projects = useRef<ProjectInterface[]>([]);;
+    const projectTypes = useRef<ProjectInterface[]>([]);
+    const [respType, setRespType] = useState<RespType>('failed');
+    const [isLoading, setIsLoading] = useState<boolean>(true);
 
     
     const loadActivities = async() => {
+        setIsLoading(true);
         try {
             let activities: Activity[] = [];
 
             /* First getting and extracting all project assets and activities */
-            const respActivities = await firestore().collection('users/vC37t4OJ5DWQ7yPvf3RC/activities').where('day','==','').get();
+            const respActivities = await firestore().collection('users/vC37t4OJ5DWQ7yPvf3RC/activities').where('day','==',dateFormatted(getDateFromDateObj(daySelected))).get();
             const respProjects = await firestore().collection('projects').get();
             const respProjectTypes = await firestore().collection('projectTypes').get();
-
+            
             respProjects.docs.forEach(d => {
                 const { color, name } = d.data();
                 projects.current.push({ id: d.id, name, color })
@@ -50,9 +47,11 @@ export const useActivityPetition = () => {
             })
 
             dispatcher( loadDBActivities( activities ) )
+            setIsLoading(false)
             
         } catch (error) {
             console.log( 'Error loading activities or assets, ',error )
+            setIsLoading(false)
         }
     }
 
@@ -132,6 +131,8 @@ export const useActivityPetition = () => {
     return {
         modalPosition,
         respType,
+        isLoading,
+        loadActivities,
         submitActivity,
     }
 

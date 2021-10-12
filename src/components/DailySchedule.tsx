@@ -4,7 +4,7 @@ import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-nati
 import { DayActivity } from '../interfaces/appInterfaces';
 import { setDateTimeToModal } from '../reducer/appActions';
 import { AppContext, ModalsContext } from '../contexts/contextsManager';
-import { ActivityNote } from './../shared/componentsManager';
+import { ActivityNote, Loading } from './../shared/componentsManager';
 import { useActivityPetition } from '../hooks/hooksManager';
 import { hourActivityStructure, dateFormatted, getDateFromDateObj } from '../helpers/helpersManager';
 import { militaryHours } from '../data/dateTimeData';
@@ -17,8 +17,12 @@ export const DailySchedule = () => {
 
     const { activities, daySelected, dispatcher } = useContext(AppContext)
     const { setIsOpen, setModalType } = useContext(ModalsContext)
-    useActivityPetition()
-    const [activityPerHour, setActivityPerHour] = useState<DayActivity[]>([])
+    const { isLoading, loadActivities } = useActivityPetition()
+    const [ activityPerHour, setActivityPerHour ] = useState<DayActivity[]>([])
+    
+    useEffect(() => {
+        loadActivities()
+    }, [daySelected])
     
     
     /* Building structure of the hour and activity */
@@ -33,6 +37,10 @@ export const DailySchedule = () => {
         dispatcher(setDateTimeToModal( dateM, time))
         setModalType('create');
         setIsOpen(true);
+    }
+
+    if(isLoading){
+        return <Loading />
     }
 
     return (
