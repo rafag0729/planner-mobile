@@ -5,7 +5,7 @@ import { AlertMsgInterface } from '../interfaces/appInterfaces';
 import { AppContext, ModalsContext } from '../contexts/contextsManager';
 import { TimeSelector, CustomSelector, Loading, CustomAlert, AlertMessage } from './../shared/componentsManager';
 import { useForm, useActivityPetition } from '../hooks/hooksManager';
-import { hourErrorsValidation } from '../helpers/helpersManager';
+import { hourErrorsValidation, singleHourValidation } from '../helpers/helpersManager';
 import { colors, fontFamily } from '../styles/generalStyles';
 
 
@@ -35,19 +35,43 @@ export const CustomModal = () => {
     })
 
     useEffect(() => {
-        if( formValues.startTime !== '--:-- am/pm' && formValues.endTime !== '--:-- am/pm'){
-            const { valid, message } = hourErrorsValidation( formValues.startTime, formValues.endTime )
+        if(formValues.startTime !== '--:-- am/pm'){
+            const { valid, message } = singleHourValidation(formValues.startTime)
             if(!valid){
                 setAlert({
                     ...alert,
+                    message: message,
                     type: 'error',
-                    open: true,
-                    message,
-                })
-                setFormValues({
-                    ...formValues,
-                    endTime: '--:-- am/pm'
-                })
+                    open: true
+                });
+                setFormValues({...formValues, startTime: '--:-- am/pm'})
+            }
+        }
+        if(formValues.endTime !== '--:-- am/pm'){
+            const { valid, message } = singleHourValidation(formValues.endTime)
+            if(!valid){
+                setAlert({
+                    ...alert,
+                    message: message,
+                    type: 'error',
+                    open: true
+                });
+                setFormValues({...formValues, endTime: '--:-- am/pm'})
+            }
+        }
+    }, [formValues.startTime, formValues.endTime])
+    
+    useEffect(() => {
+        if(formValues.startTime !== '--:-- am/pm' && formValues.endTime !== '--:-- am/pm'){
+            const { valid, message } = hourErrorsValidation(formValues.startTime, formValues.endTime)
+            if(!valid){
+                setAlert({
+                    ...alert,
+                    message: message,
+                    type: 'error',
+                    open: true
+                });
+                setFormValues({...formValues, endTime: '--:-- am/pm'})
             }
         }
     }, [formValues.startTime, formValues.endTime])
@@ -74,7 +98,6 @@ export const CustomModal = () => {
         submitActivity({ ...formValues })
         resetForm();
     }
-
 
     const cancelModals = () => {
         setModalType( null );

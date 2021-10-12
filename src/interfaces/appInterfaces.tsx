@@ -94,7 +94,6 @@ export interface ModalsInterface {
 export type ModalTypes = 'create' | 'edit' | 'delete' | null;
 
 // Alert Types
-
 export interface AlertMsgInterface {
     type: 'success' | 'error' | null;
     message: string;
@@ -102,6 +101,11 @@ export interface AlertMsgInterface {
     open?: boolean;
 } 
 
+// Errors
+export interface HourErrors {
+    valid: boolean;
+    message: string
+}
 
 /*  */
 export type SubmitType = 'creation' | 'edition' | 'delete';
