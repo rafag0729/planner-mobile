@@ -1,12 +1,23 @@
 import React from 'react';
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
+
+import { ModalsContextProvider } from '../contexts/contextsManager';
+import { WeekDateHeaders, DateNavigation, DailySchedule, CustomModal } from '../shared/componentsManager';
 
 
 
 export const WeeklyScreen = () => {
     return (
-        <View>
-            <Text>WeeklyScreen</Text>
-        </View>
+        <ModalsContextProvider>
+            <View style={{ flex: 1, padding: 5}}>
+                <WeekDateHeaders />
+
+                <DateNavigation />
+
+                <DailySchedule/>            
+                
+                <CustomModal />
+            </View>
+        </ModalsContextProvider>
     )
 }

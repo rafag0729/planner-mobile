@@ -3,32 +3,34 @@ import { StyleSheet, Text, View } from 'react-native';
 
 import { DateSpecs } from '../interfaces/appInterfaces';
 import { AppContext } from '../contexts/contextsManager';
-import { getDateFromDateObj } from '../helpers/helpersManager';
+import { getDateFromDateObj, buildingWeek } from '../helpers/helpersManager';
 import { colors, fontFamily } from '../styles/generalStyles';
 
 
 
 
-export const DateHeaders = () => {
+export const WeekDateHeaders = () => {
 
     const { daySelected } = useContext(AppContext)
     const [ date, setDate ] = useState<DateSpecs>( getDateFromDateObj( new Date() ))
+    const [week, setWeek] = useState<DateSpecs[]>([])
 
     useEffect(() => {   
-        const { day, dayName, monthName, year } = getDateFromDateObj( daySelected );
+        const weekBuild = buildingWeek( daySelected )
+        const { monthName, year } = getDateFromDateObj( daySelected );
         setDate({
             ...date,
-            day,
-            dayName,
             monthName,
             year
         })
+        setWeek(weekBuild)
     }, [daySelected])
+    
 
     return (
         <View>
             <Text style={ styles.mainTextHead }>{ date.monthName } { date.year }</Text>
-            <Text style={ styles.subTextHead }>{ date.dayName } { date.day }</Text>
+            <Text style={ styles.subTextHead }>Del { week[0]?.day } al { week[week.length-1]?.day }</Text>
         </View>
     )
 }
