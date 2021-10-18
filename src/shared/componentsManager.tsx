@@ -10,7 +10,7 @@ import { TimeSelector } from "../components/TimeSelector";
 import { Loading } from "../components/Loading";
 import { CustomAlert } from "../components/CustomAlert";
 import { AlertMessage } from "../components/AlertMessage";
-
+import { WeeklySchedule } from "../components/WeeklySchedule";
 
 
 
@@ -26,5 +26,6 @@ export {
     TimeSelector,
     Loading,
     CustomAlert,
-    AlertMessage
+    AlertMessage,
+    WeeklySchedule
 }

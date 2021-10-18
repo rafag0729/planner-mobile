@@ -3,7 +3,7 @@ import { hourActivityStructure } from "./hourActivityStructure";
 import { getActivitySpecs } from "./getActivitySpecs";
 import { getHourFromDateObj, getHourFromString, timeFormatted } from './timeHelpers';
 import { hourErrorsValidation, singleHourValidation } from "./hourErrorsValidation";
-import { buildingWeek } from './buildingWeek';
+import { buildingWeek, getWorkDays } from './weekHelpers';
 
 
 
@@ -18,5 +18,6 @@ export {
     hourActivityStructure,
     hourErrorsValidation,
     singleHourValidation,
-    buildingWeek
+    buildingWeek,
+    getWorkDays
 }

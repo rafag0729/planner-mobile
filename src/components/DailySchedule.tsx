@@ -1,13 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
-import { DayActivity } from '../interfaces/appInterfaces';
+import { DayStructure } from '../interfaces/appInterfaces';
 import { setDateTimeToModal } from '../reducer/appActions';
 import { AppContext, ModalsContext } from '../contexts/contextsManager';
 import { ActivityNote, Loading } from './../shared/componentsManager';
 import { useActivityPetition } from '../hooks/hooksManager';
-import { hourActivityStructure, dateFormatted, getDateFromDateObj } from '../helpers/helpersManager';
-import { militaryHours } from '../data/dateTimeData';
+import { hourActivityStructure, dateFormatted, getDateFromDateObj} from '../helpers/helpersManager';
 import { colors, fontFamily } from '../styles/generalStyles';
 
 
@@ -18,17 +17,17 @@ export const DailySchedule = () => {
     const { activities, daySelected, dispatcher } = useContext(AppContext)
     const { setIsOpen, setModalType } = useContext(ModalsContext)
     const { isLoading, loadActivities } = useActivityPetition()
-    const [ activityPerHour, setActivityPerHour ] = useState<DayActivity[]>([])
+    const [ dayHourActivityStructure, setDayHourActivityStructure ] = useState<DayStructure[]>([])
     
     useEffect(() => {
-        loadActivities()
+        loadActivities('day')
     }, [daySelected])
     
     
     /* Building structure of the hour and activity */
     useEffect(() => {
-        const structure = hourActivityStructure( militaryHours, activities )
-        setActivityPerHour( structure )
+        const structure = hourActivityStructure( [ getDateFromDateObj(daySelected) ], activities )
+        setDayHourActivityStructure( structure )
     }, [activities])
 
     
@@ -49,33 +48,34 @@ export const DailySchedule = () => {
             showsVerticalScrollIndicator={ false }
             >
             
-            {/* Each hour block */}
-            {   
-                activityPerHour.map(({ hour, activity }, i) => (
-                    <View 
-                        key={ i.toString() }
-                        style={ styles.calendarHourContainer } >
-                        <View style={{ flex: 1}}>
-                            <Text style={ styles.textHour }>{ `${ hour }:00 ${hour > 12 ? 'pm' : 'am' }` }</Text>
-                        </View>
-                        <View style={{ flex: 2 }} >
-                            <TouchableOpacity style={{ flex: 1 }} onPress={ () => showCreateModal(daySelected, `${hour < 10 ? '0'+hour.toString() : hour }:00`) }/>
-                            <TouchableOpacity style={{ flex: 1 }} onPress={ () => showCreateModal(daySelected, `${hour < 10 ? '0'+hour.toString() : hour }:15`) }/>
-                            <TouchableOpacity style={{ flex: 1 }} onPress={ () => showCreateModal(daySelected, `${hour < 10 ? '0'+hour.toString() : hour }:30`) }/>
-                            <TouchableOpacity style={{ flex: 1 }} onPress={ () => showCreateModal(daySelected, `${hour < 10 ? '0'+hour.toString() : hour }:45`) }/>
-
-                            {   activity.map(a => (
-                                    <ActivityNote 
-                                        key={ a.id }
-                                        activity={ a }
-                                        />  
-                                ))
-                            }
-                        </View>
-                    </View>
-                )) 
+            { /* Each hour block */
+                dayHourActivityStructure.map((dha) => {
+                    return dha.dayHourStructure.map(({hour, activity}, i) => (
+                        (
+                            <View 
+                                key={ i.toString() }
+                                style={ styles.calendarHourContainer } >
+                                <View style={{ flex: 1}}>
+                                    <Text style={ styles.textHour }>{ `${ hour }:00 ${hour > 12 ? 'pm' : 'am' }` }</Text>
+                                </View>
+                                <View style={{ flex: 2 }} >
+                                    <TouchableOpacity style={{ flex: 1 }} onPress={ () => showCreateModal(daySelected, `${hour < 10 ? '0'+hour.toString() : hour }:00`) }/>
+                                    <TouchableOpacity style={{ flex: 1 }} onPress={ () => showCreateModal(daySelected, `${hour < 10 ? '0'+hour.toString() : hour }:15`) }/>
+                                    <TouchableOpacity style={{ flex: 1 }} onPress={ () => showCreateModal(daySelected, `${hour < 10 ? '0'+hour.toString() : hour }:30`) }/>
+                                    <TouchableOpacity style={{ flex: 1 }} onPress={ () => showCreateModal(daySelected, `${hour < 10 ? '0'+hour.toString() : hour }:45`) }/>
+        
+                                    {   activity.map(a => (
+                                            <ActivityNote 
+                                                key={ a.id }
+                                                activity={ a }
+                                                />  
+                                        ))
+                                    }
+                                </View>
+                            </View>
+                        )))
+                })
             }
-
         </ScrollView>
     )
 }

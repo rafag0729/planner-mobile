@@ -53,6 +53,11 @@ export interface Activity {
     day: string;
 }
 
+export interface DayStructure {
+    date: DateSpecs;
+    dayHourStructure: DayActivity[]
+}
+
 export interface DayActivity {
     hour: number;
     activity: Activity[]

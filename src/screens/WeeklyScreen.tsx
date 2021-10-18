@@ -1,8 +1,12 @@
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { View } from 'react-native';
 
-import { ModalsContextProvider } from '../contexts/contextsManager';
-import { WeekDateHeaders, DateNavigation, DailySchedule, CustomModal } from '../shared/componentsManager';
+import { AppContext, ModalsContextProvider  } from '../contexts/contextsManager';
+import { buildingWeek, getDateFromDateObj } from '../helpers/helpersManager';
+import { DateSpecs } from '../interfaces/appInterfaces';
+import { WeekDateHeaders, DateNavigation, WeeklySchedule, CustomModal } from '../shared/componentsManager';
+
+
 
 
 
@@ -14,7 +18,7 @@ export const WeeklyScreen = () => {
 
                 <DateNavigation />
 
-                <DailySchedule/>            
+                <WeeklySchedule />
                 
                 <CustomModal />
             </View>

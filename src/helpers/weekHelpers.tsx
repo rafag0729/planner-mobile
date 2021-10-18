@@ -15,9 +15,17 @@ export const buildingWeek = (date: Date): DateSpecs[] => {
     const startDay = day - dayOfWeek;
 
     for( let i = 0; i <= 6; i++){
-        const day = new Date(year, monthNumber, startDay + i )
-        weekToBuild.push( getDateFromDateObj(day)  )
+        const day = new Date(year, monthNumber, startDay + i );
+        weekToBuild.push( getDateFromDateObj(day) );
     }
 
     return weekToBuild;
+}
+
+export const getWorkDays = (week: DateSpecs[]): DateSpecs[] => {
+
+    week.shift();
+    week.pop();
+    
+    return week;
 }

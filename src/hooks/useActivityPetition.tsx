@@ -1,11 +1,12 @@
-import firestore from '@react-native-firebase/firestore';
+import firestore, { FirebaseFirestoreTypes } from '@react-native-firebase/firestore';
 import { useContext, useRef, useState } from "react"
 
 import { Activity, ProjectInterface, RespType, ActivityToSubmit } from '../interfaces/appInterfaces';
 import { addNewActivity, loadDBActivities } from '../reducer/appActions';
 import { AppContext, ModalsContext } from '../contexts/contextsManager';
 import { useMoveModalAnimation } from "./hooksManager";
-import { dateFormatted, getDateFromDateObj } from '../helpers/helpersManager';
+import { dateFormatted, getDateFromDateObj, buildingWeek, getWorkDays } from '../helpers/helpersManager';
+
 
 
 
@@ -20,16 +21,49 @@ export const useActivityPetition = () => {
     const [isLoading, setIsLoading] = useState<boolean>(true);
 
     
-    const loadActivities = async() => {
+    const loadActivities = async(view: 'day' | 'week' | 'month') => {
         setIsLoading(true);
         try {
             let activities: Activity[] = [];
 
-            /* First getting and extracting all project assets and activities */
-            const respActivities = await firestore().collection('users/vC37t4OJ5DWQ7yPvf3RC/activities').where('day','==',dateFormatted(getDateFromDateObj(daySelected))).get();
+            let respActivities;
+            switch (view) {
+                case 'day':
+                    respActivities = await firestore().collection('users/vC37t4OJ5DWQ7yPvf3RC/activities').where('day','==',dateFormatted(getDateFromDateObj(daySelected))).get();
+                    respActivities.docs.forEach(d => {
+                        const { projectName, activityType, description, day, endTime, startTime } = d.data()
+                        activities.push({ 
+                            projectName: projects.current.filter( p => p.id === projectName)[0],
+                            activityType: projectTypes.current.filter( p => p.id === activityType)[0],
+                            description, day, endTime, startTime, id: d.id })
+                    })
+                    break;
+
+                case 'week':
+                    let promises: Promise<FirebaseFirestoreTypes.QuerySnapshot<FirebaseFirestoreTypes.DocumentData>>[] = [];
+                    const daysOfWeek = getWorkDays( buildingWeek(daySelected) );
+                    daysOfWeek.forEach((d) => {
+                        promises.push(firestore().collection('users/vC37t4OJ5DWQ7yPvf3RC/activities').where('day','==', dateFormatted(d)).get())
+                    })
+                    const resp = await Promise.all(promises);
+                    resp.forEach(a => {
+                        a.docs.forEach( d => {
+                            const { projectName, activityType, description, day, endTime, startTime } = d.data()
+                            activities.push({ 
+                                projectName: projects.current.filter( p => p.id === projectName)[0],
+                                activityType: projectTypes.current.filter( p => p.id === activityType)[0],
+                                description, day, endTime, startTime, id: d.id })
+                        })
+                    })
+                    break;
+
+                case 'month':
+                    respActivities = await firestore().collection('users/vC37t4OJ5DWQ7yPvf3RC/activities').where('day','==', '11-10-2021' && '13-10-2021').get();
+                    break;
+            }
             const respProjects = await firestore().collection('projects').get();
             const respProjectTypes = await firestore().collection('projectTypes').get();
-            
+
             respProjects.docs.forEach(d => {
                 const { color, name } = d.data();
                 projects.current.push({ id: d.id, name, color })
@@ -38,13 +72,7 @@ export const useActivityPetition = () => {
                 const { name } = d.data();
                 projectTypes.current.push({ id: d.id, name })
             })
-            respActivities.docs.forEach( (d) => {
-                const { projectName, activityType, description, day, endTime, startTime } = d.data()
-                activities.push({ 
-                    projectName: projects.current.filter( p => p.id === projectName)[0],
-                    activityType: projectTypes.current.filter( p => p.id === activityType)[0],
-                    description, day, endTime, startTime, id: d.id })
-            })
+            
 
             dispatcher( loadDBActivities( activities ) )
             setIsLoading(false)
