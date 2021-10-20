@@ -53,6 +53,18 @@ export interface Activity {
     day: string;
 }
 
+export interface ActivityToSubmit {
+    id?: string | null;
+    projectName: string;
+    activityType: string;
+    description: string;
+    startTime: string;
+    endTime: string;
+    day: string;
+}
+
+
+// Days - activities structure
 export interface DayStructure {
     date: DateSpecs;
     dayHourStructure: DayActivity[]
@@ -63,14 +75,24 @@ export interface DayActivity {
     activity: Activity[]
 }
 
-export interface ActivityToSubmit {
-    id?: string | null;
-    projectName: string;
-    activityType: string;
-    description: string;
-    startTime: string;
-    endTime: string;
-    day: string;
+// Week
+export interface WeekData {
+    weekObj: DateSpecs[],
+    weekStr: string[]
+}
+
+// Month - activities structure
+export interface MonthActivityStructure {
+    mondays: ActivityPerDayForMonth[];
+    tuesdays: ActivityPerDayForMonth[];
+    wednesdays: ActivityPerDayForMonth[];
+    thursdays: ActivityPerDayForMonth[];
+    fridays: ActivityPerDayForMonth[];
+}
+
+export interface ActivityPerDayForMonth {
+    day: DateSpecs;
+    activity: Activity[]
 }
 
 // User

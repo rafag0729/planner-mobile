@@ -1,11 +1,15 @@
-import { DateSpecs } from '../interfaces/appInterfaces';
-import { getDateFromDateObj } from './helpersManager';
+import { WeekData } from '../interfaces/appInterfaces';
+import { dateFormatted, getDateFromDateObj } from './helpersManager';
 
 
 
-export const buildingWeek = (date: Date): DateSpecs[] => {
 
-    const weekToBuild: DateSpecs[] = []
+export const buildingWeek = (date: Date): WeekData => {
+
+    const weekToBuild: WeekData = {
+        weekObj: [],
+        weekStr: []
+    }
 
     const day = date.getDate();
     const dayOfWeek = date.getDay();
@@ -16,16 +20,22 @@ export const buildingWeek = (date: Date): DateSpecs[] => {
 
     for( let i = 0; i <= 6; i++){
         const day = new Date(year, monthNumber, startDay + i );
-        weekToBuild.push( getDateFromDateObj(day) );
+        weekToBuild.weekObj.push( getDateFromDateObj(day) );
+        weekToBuild.weekStr.push( dateFormatted(getDateFromDateObj(day)) );
     }
 
     return weekToBuild;
 }
 
-export const getWorkDays = (week: DateSpecs[]): DateSpecs[] => {
-
-    week.shift();
-    week.pop();
+export const getWorkDays = (week: WeekData): WeekData => {
     
-    return week;
+    week.weekObj.shift();
+    week.weekStr.shift();
+    week.weekObj.pop();
+    week.weekStr.pop();
+
+    return {
+        weekObj: week.weekObj,
+        weekStr: week.weekStr
+    }
 }

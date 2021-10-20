@@ -1,22 +1,18 @@
 import React from 'react';
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
+
+import { MonthDateHeaders, DateNavigation, MonthlySchedule } from '../shared/componentsManager';
 
 
 
 export const MonthlyScreen = () => {
     return (
-        <View>
-            <Text
-                style={{
-                    fontFamily: 'Poppins-Bold'
-                }}
-                >MonthlyScreen Poppins</Text>
+        <View style={{ flex: 1, padding: 5}}>
+            <MonthDateHeaders />
 
-            <Text
-                style={{
-                    fontFamily: 'Poppins-Bold'
-                }}
-                >MonthlyScreen</Text>
+            <DateNavigation />
+
+            <MonthlySchedule />
         </View>
     )
 }

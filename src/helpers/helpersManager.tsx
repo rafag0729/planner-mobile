@@ -1,9 +1,10 @@
 import { getDateFromDateObj, dateFormatted } from './dateHelpers';
-import { hourActivityStructure } from "./hourActivityStructure";
+import { hourActivityStructure, monthlyDayActivityStructure } from "./timeActivityStructure";
 import { getActivitySpecs } from "./getActivitySpecs";
 import { getHourFromDateObj, getHourFromString, timeFormatted } from './timeHelpers';
 import { hourErrorsValidation, singleHourValidation } from "./hourErrorsValidation";
 import { buildingWeek, getWorkDays } from './weekHelpers';
+import { getMonthDays } from './monthHelpers';
 
 
 
@@ -19,5 +20,7 @@ export {
     hourErrorsValidation,
     singleHourValidation,
     buildingWeek,
-    getWorkDays
+    getWorkDays,
+    monthlyDayActivityStructure,
+    getMonthDays
 }
