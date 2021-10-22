@@ -1,5 +1,6 @@
 import { Header } from "../components/Header"
 import { ActivityNote } from '../components/ActivityNote';
+import { ActivityStick } from '../components/ActivityStick';
 import { DateNavigation } from "../components/DateNavigation";
 import { DateHeaders } from '../components/DateHeaders';
 import { WeekDateHeaders } from "../components/WeekDateHeader";
@@ -24,6 +25,7 @@ export {
     DateNavigation,    
     DailySchedule,
     ActivityNote,
+    ActivityStick,
     CustomSelector,
     CustomModal,
     TimeSelector,

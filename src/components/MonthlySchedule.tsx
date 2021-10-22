@@ -1,44 +1,36 @@
+import { useNavigation } from '@react-navigation/core';
 import React, { useContext, useEffect, useState } from 'react';
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 
-import { DateSpecs, DayStructure } from '../interfaces/appInterfaces';
-import { setDateTimeToModal } from '../reducer/appActions';
-import { AppContext, ModalsContext } from '../contexts/contextsManager';
-import { ActivityNote, Loading } from '../shared/componentsManager';
+import { ActivityPerDayForMonth, DateSpecs } from '../interfaces/appInterfaces';
+import { AppContext } from '../contexts/contextsManager';
+import { setDate } from '../reducer/appActions';
+import { Loading, ActivityStick } from '../shared/componentsManager';
 import { useActivityPetition } from '../hooks/hooksManager';
-import { hourActivityStructure, monthlyDayActivityStructure, dateFormatted, getDateFromDateObj, buildingWeek, getWorkDays } from '../helpers/helpersManager';
+import { monthlyDayActivityStructure} from '../helpers/helpersManager';
 import { colors, fontFamily } from '../styles/generalStyles';
-
 
 
 
 export const MonthlySchedule = () => {
 
-    const { activities, daySelected, dispatcher } = useContext(AppContext)
-    const { setIsOpen, setModalType } = useContext(ModalsContext)
-    const { isLoading, loadActivities } = useActivityPetition()
-    const [ dayHourActivityStructure, setDayHourActivityStructure ] = useState<DayStructure[]>([])
-    const [week, setWeek] = useState<DateSpecs[]>([])
-
-    useEffect(() => {
-        monthlyDayActivityStructure( daySelected );
-    }, [])
-
+    const navigation = useNavigation()
+    const {activities, daySelected, dispatcher} = useContext(AppContext)
+    const {isLoading, loadActivities} = useActivityPetition()
+    const [monthActivities, setMonthActivities] = useState<ActivityPerDayForMonth[]>([])
+    const [initialDate, setInitialDate] = useState( new Date() )
+    
     useEffect(() => {
         loadActivities('month')
+        const monthStructure = monthlyDayActivityStructure( daySelected, activities );
+        setMonthActivities( monthStructure )
+        setInitialDate( new Date(monthStructure[0].day.year, monthStructure[0].day.monthNumber, monthStructure[0].day.day) )
     }, [daySelected])
 
-    useEffect(() => {
-        const structure = hourActivityStructure( getWorkDays( buildingWeek(daySelected) ).weekObj , activities )
-        setDayHourActivityStructure( structure )
-    }, [daySelected])
-    
-
-    const showCreateModal = (date: Date, time: string) => {
-        const dateM = dateFormatted( getDateFromDateObj(date) )
-        dispatcher(setDateTimeToModal( dateM, time))
-        setModalType('create');
-        setIsOpen(true);
+    const navigateToDateScreen = (date: DateSpecs) => {
+        const dateToGo = new Date( date.year, date.monthNumber, date.day )
+        dispatcher( setDate( dateToGo ) )
+        navigation.navigate('DailyScreen' as any)        
     }
 
     if(isLoading){
@@ -50,84 +42,77 @@ export const MonthlySchedule = () => {
             style={{ marginTop: 25 }}
             showsVerticalScrollIndicator={ false }
             >
+            <View style={{ flex: 1}} >
+                <View style={ styles.dayHeaderContainer }>
+                    <View style={{ width: 70 }}><Text style={ styles.dayHeaderText }>L</Text></View>
+                    <View style={{ width: 70 }}><Text style={ styles.dayHeaderText }>M</Text></View>
+                    <View style={{ width: 70 }}><Text style={ styles.dayHeaderText }>M</Text></View>
+                    <View style={{ width: 70 }}><Text style={ styles.dayHeaderText }>J</Text></View>
+                    <View style={{ width: 70 }}><Text style={ styles.dayHeaderText }>V</Text></View>
+                </View>
+                <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-start', flexWrap: 'wrap'}}>
+                    <View style={{ width: (initialDate.getDay() - 1) * 70 }}/>
+                    {   monthActivities.map((d, i) => (
+                                <TouchableOpacity 
+                                    key={ (d.day.day + i).toString() }
+                                    onPress={ () => navigateToDateScreen(d.day) }
+                                    style={ styles.eachDayContainer }>
+                                    <Text style={ styles.textDay }>{d.day.day}</Text>
 
-            <ScrollView
-                style={ styles.weekContainer }
-                horizontal
-                showsHorizontalScrollIndicator={ false }
-                >
-                {   dayHourActivityStructure.map(({date, dayHourStructure}, i) => (
-                        <View
-                            key={ i.toString() }
-                            >
-                            <View style={ styles.dayHeaderContainer } >
-                                <Text style={ styles.dayHeaderText }>{ `${date.dayName} - ${date.day}` }</Text>
-                            </View>
-
-                            {   dayHourStructure.map(({hour, activity}, i) => (
-                                    <View 
-                                        key={ i.toString() } 
-                                        style={ styles.calendarHourContainer}
-                                        >
-                                        <View style={{ flex: 2 }} >
-                                        <Text style={ styles.textHour }>{ `${ hour }:00 ${hour > 12 ? 'pm' : 'am' }` }</Text>
-                                            <TouchableOpacity style={{ flex: 1}} onPress={ () => showCreateModal(daySelected, `${hour < 10 ? '0'+hour.toString() : hour }:00`) }/>
-                                            <TouchableOpacity style={{ flex: 1 }} onPress={ () => showCreateModal(daySelected, `${hour < 10 ? '0'+hour.toString() : hour }:15`) }/>
-                                            <TouchableOpacity style={{ flex: 1 }} onPress={ () => showCreateModal(daySelected, `${hour < 10 ? '0'+hour.toString() : hour }:30`) }/>
-                                            <TouchableOpacity style={{ flex: 1 }} onPress={ () => showCreateModal(daySelected, `${hour < 10 ? '0'+hour.toString() : hour }:45`) }/>
-                
-                                            {   activity.map(a => (
-                                                    <ActivityNote 
-                                                        key={ a.id }
-                                                        activity={ a }
-                                                        />  
-                                                ))
-                                            }
-                                        </View>
-                                    </View>
-                                ))
-                            }
-                        </View>
-                    ))
-                }
-            </ScrollView>
+                                    {   d.activity.map((a, i) => (
+                                            <ActivityStick 
+                                                key={ i.toString() }
+                                                activity={ a } />
+                                        ))
+                                    }
+                                </TouchableOpacity>
+                            )
+                        )
+                    }
+                </View>
+            </View>
         </ScrollView>
     )
 }
 
 const styles = StyleSheet.create({
-    weekContainer: {
-        flexDirection: 'row',
-    },
-    dayHeaderContainer: {
-        width: 200,
-        height: 50,
-        backgroundColor: colors.lightBlue,
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderColor: 'white',
-        borderWidth: 1
-    },
-    dayHeaderText: {
-        fontFamily: fontFamily.bold,
-        color: 'white',
-        fontSize: 14
-    },
-    calendarHourContainer: {
-        position: 'relative',
-        zIndex: 0,
-        elevation: 0,
-        height: 100,
-        borderBottomWidth: .5,
-        borderBottomColor: colors.lightGrey,
+    monthContainer: {
+        flex: 1, 
         flexDirection: 'row'
     },
-    textHour: {
+    daysColumnContainer: {
+        flex: 1,
+    },
+    dayHeaderContainer: {
+        flexDirection: 'row',
+        height: 50,
+        backgroundColor: colors.lightBlue,
+        alignItems: 'center'
+    },
+    dayHeaderText: {
+        textAlign: 'center',
+        color: 'white',
+        fontSize: 14,
+        fontFamily: fontFamily.bold,
+        marginTop: 4
+    },
+    eachDayContainer: {
+        height: 70,
+        width: 70,
+        borderColor: colors.lightGrey,
+        borderWidth: .5,
+        position: 'relative',
+        flexDirection: 'row',
+        alignItems: 'flex-end',
+        justifyContent: 'flex-start',
+        paddingBottom: 15
+    },
+    textDay: {
         fontFamily: fontFamily.bold,
         color: colors.lightGrey,
         fontSize: 16,
         position: 'absolute',
-        top: 5,
-        left: 10
+        top: 0,
+        right: 5
     }
 });

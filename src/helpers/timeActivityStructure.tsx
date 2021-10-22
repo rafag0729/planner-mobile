@@ -1,6 +1,6 @@
-import { Activity, DayActivity, DayStructure, DateSpecs, MonthActivityStructure } from '../interfaces/appInterfaces';
+import { Activity, DayActivity, DayStructure, DateSpecs, ActivityPerDayForMonth } from '../interfaces/appInterfaces';
 import { militaryHours } from '../data/dateTimeData';
-import { dateFormatted, getWorkDays, buildingWeek, getDateFromDateObj } from './helpersManager';
+import { dateFormatted, getDateFromDateObj } from './helpersManager';
 
 
 
@@ -43,63 +43,25 @@ export const hourActivityStructure = (days: DateSpecs[], activities: Activity[] 
 }
 
 
-export const monthlyDayActivityStructure = (daySelected: Date)/* : MonthActivityStructure */ => {
+export const monthlyDayActivityStructure = (daySelected: Date, activities: Activity[] ): ActivityPerDayForMonth[] => {
     
-    let mondays = [];
-    let tuesdays = [];
-    let wednesdays = [];
-    let thursdays = [];
-    let fridays = [];
+    let days: ActivityPerDayForMonth[] = [];
 
     const { monthNumber, year } = getDateFromDateObj( daySelected );
     let initialDate: Date = new Date(year, monthNumber);
     let dateToWork: Date = new Date(year, monthNumber, 1);
 
 
-    for( let dayNumber = 1; initialDate.getMonth() === dateToWork.getMonth() ; dayNumber++){
+    for( let dayNumber = 1; initialDate.getMonth() === dateToWork.getMonth(); dayNumber++){
         dateToWork = new Date( year, monthNumber, dayNumber);
 
-        switch (dateToWork.getDay()) {
-            case 1:
-                mondays.push( getDateFromDateObj(dateToWork) )
-                break;
-            case 2:
-                tuesdays.push( getDateFromDateObj(dateToWork) )
-                break;
-            case 3:
-                wednesdays.push( getDateFromDateObj(dateToWork) )
-                break;
-            case 4:
-                thursdays.push( getDateFromDateObj(dateToWork) )
-                break;
-            case 5:
-                fridays.push( getDateFromDateObj(dateToWork) )
-                break;
+        if (initialDate.getMonth() === dateToWork.getMonth() && dateToWork.getDay() !== 0 && dateToWork.getDay() !== 6 ){
+            days.push({
+                day: getDateFromDateObj(dateToWork),
+                activity: activities.filter(a => a.day === dateFormatted(getDateFromDateObj(dateToWork)) )
+            })
         }
     }
 
-
-    const monthStructure = {
-        mondays,
-        tuesdays, 
-        wednesdays,
-        thursdays, 
-        fridays
-    }
-
-    
-    
-
-    /* {
-        dayName: DateSpecs;
-        days: {
-            day: DateSpecs;
-            activity: Activity[]
-        }[]
-    } */
-
-
-    return {
-
-    }
+    return days;
 }
