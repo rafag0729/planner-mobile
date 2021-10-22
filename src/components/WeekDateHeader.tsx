@@ -16,14 +16,14 @@ export const WeekDateHeaders = () => {
     const [week, setWeek] = useState<DateSpecs[]>([])
 
     useEffect(() => {   
-        const weekBuild = buildingWeek( daySelected )
         const { monthName, year } = getDateFromDateObj( daySelected );
+        const { weekObj } = buildingWeek( daySelected )
         setDate({
             ...date,
             monthName,
             year
         })
-        setWeek(weekBuild)
+        setWeek( weekObj )
     }, [daySelected])
     
 

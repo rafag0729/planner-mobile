@@ -25,7 +25,8 @@ export const WeeklySchedule = () => {
     }, [daySelected])
 
     useEffect(() => {
-        const structure = hourActivityStructure( getWorkDays( buildingWeek(daySelected) ), activities )
+        const { weekObj } = getWorkDays( buildingWeek(daySelected) );
+        const structure = hourActivityStructure( weekObj , activities )
         setDayHourActivityStructure( structure )
     }, [daySelected])
     
