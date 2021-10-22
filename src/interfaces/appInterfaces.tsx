@@ -8,7 +8,7 @@ export interface AppContextInterface {
     };
     activities: Activity[];
     activitySelected: Activity | null;
-    view: 'M' | 'W' | 'D';
+    view: ScreenView;
     user?: User;
     dispatcher?: any
 }
@@ -24,6 +24,8 @@ export type AppActions =
     | { type: 'Add date-startTime  to Modal', payload: { date: string, startTime: string} }
     
 
+// View
+export type ScreenView = 'M' | 'W' | 'D'
 
 // Dates
 export type DateSpecs = {

@@ -2,6 +2,7 @@ import DateTimePicker, { AndroidEvent } from '@react-native-community/datetimepi
 import React, { useContext, useEffect, useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
+import { ScreenView } from './../interfaces/appInterfaces'
 import { AppContext } from '../contexts/contextsManager';
 import { setDate } from '../reducer/appActions';
 import { getDateFromDateObj, buildingWeek } from '../helpers/helpersManager';
@@ -12,7 +13,7 @@ import { colors, fontFamily } from '../styles/generalStyles';
 
 
 interface Props {
-    view: 'M' | 'W' | 'D'
+    view: ScreenView;
 }
 
 export const DateNavigation = ( { view }: Props ) => {
@@ -55,7 +56,15 @@ export const DateNavigation = ( { view }: Props ) => {
 
     const handleDateChangeByArrow = (operation: 'add' | 'subtract') => {
         let { day, monthNumber, year } = getDateFromDateObj( daySelected );
-        operation === 'add' ? day++ : day--;
+        if(view === 'D'){
+            operation === 'add' ? day++ : day--;
+        }
+        if(view === 'W'){
+            operation === 'add' ? day = day + 8 : day = day - 8;
+        }
+        if(view === 'M'){
+            operation === 'add' ? monthNumber++ : monthNumber--;
+        }
         const date = new Date(year, monthNumber, day);
         dispatcher( setDate( date ) )
     }
