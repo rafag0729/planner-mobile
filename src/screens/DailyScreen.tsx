@@ -13,7 +13,7 @@ export const DailyScreen = () => {
             <View style={{ flex: 1, padding: 5}}>
                 <DateHeaders />
 
-                <DateNavigation />
+                <DateNavigation view="D" />
 
                 <DailySchedule/>            
                 

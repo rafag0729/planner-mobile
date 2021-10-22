@@ -4,14 +4,18 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 import { AppContext } from '../contexts/contextsManager';
 import { setDate } from '../reducer/appActions';
+import { getDateFromDateObj, buildingWeek } from '../helpers/helpersManager';
 import { CalendarIcon, NavigationArrow } from '../shared/assetsManager';
 import { colors, fontFamily } from '../styles/generalStyles';
-import { getDateFromDateObj } from '../helpers/dateHelpers';
+ 
 
 
 
+interface Props {
+    view: 'M' | 'W' | 'D'
+}
 
-export const DateNavigation = () => {
+export const DateNavigation = ( { view }: Props ) => {
 
     const { daySelected, dispatcher } = useContext(AppContext)
     const [ pickerStatus, setPickerStatus ] = useState<boolean>(false)    
@@ -27,7 +31,18 @@ export const DateNavigation = () => {
         const actualDate = new Date();
         const dateStateFormatted = new Date(dateState.getFullYear(), dateState.getMonth(), dateState.getDate()).getTime();
         const actualDateFormatted = new Date(actualDate.getFullYear(), actualDate.getMonth(), actualDate.getDate()).getTime();
-        ( dateStateFormatted === actualDateFormatted ) ? setTodayStatus(true) : setTodayStatus(false);
+        if(view === 'M') {
+            (dateState.getMonth() === actualDate.getMonth() && dateState.getMonth() === actualDate.getMonth() ) ? setTodayStatus(true) : setTodayStatus(false);
+        }else if( view === 'W'){
+            const { weekObj } = buildingWeek(daySelected)
+            if(weekObj.filter(d => d.day == actualDate.getDate() && d.monthNumber === actualDate.getMonth() && d.year === actualDate.getFullYear() ).length >= 1) {
+                setTodayStatus(true)
+            }else{
+                setTodayStatus(false);
+            }
+        }else if( view === 'D'){
+            ( dateStateFormatted === actualDateFormatted ) ? setTodayStatus(true) : setTodayStatus(false);
+        }
     }
 
     /* Updating date based on picker */

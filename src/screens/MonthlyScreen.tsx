@@ -10,7 +10,7 @@ export const MonthlyScreen = () => {
         <View style={{ flex: 1, padding: 5}}>
             <MonthDateHeaders />
 
-            <DateNavigation />
+            <DateNavigation view='M' />
 
             <MonthlySchedule />
         </View>

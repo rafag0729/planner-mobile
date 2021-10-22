@@ -16,7 +16,7 @@ export const WeeklyScreen = () => {
             <View style={{ flex: 1, padding: 5}}>
                 <WeekDateHeaders />
 
-                <DateNavigation />
+                <DateNavigation view='W' />
 
                 <WeeklySchedule />
                 
