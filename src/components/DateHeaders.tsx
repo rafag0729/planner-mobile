@@ -15,13 +15,12 @@ export const DateHeaders = () => {
     const [ date, setDate ] = useState<DateSpecs>( getDateFromDateObj( new Date() ))
 
     useEffect(() => {   
-        const { day, dayName, monthName, year } = getDateFromDateObj( daySelected );
         setDate({
             ...date,
-            day,
-            dayName,
-            monthName,
-            year
+            day: daySelected.day,
+            dayName: daySelected.dayName,
+            monthName: daySelected.monthName,
+            year: daySelected.year
         })
     }, [daySelected])
 

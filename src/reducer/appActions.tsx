@@ -1,4 +1,5 @@
 import { AppActions, Activity, ActivityToSubmit } from '../interfaces/appInterfaces';
+import { getDateFromDateObj } from '../helpers/dateHelpers';
 
 
 
@@ -6,7 +7,7 @@ import { AppActions, Activity, ActivityToSubmit } from '../interfaces/appInterfa
 export const setDate = ( date: Date): AppActions => {
     return {
         type: 'Set date',
-        payload: date
+        payload: getDateFromDateObj(date)
     }
 }
 

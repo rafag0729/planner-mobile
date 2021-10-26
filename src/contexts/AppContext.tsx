@@ -1,20 +1,21 @@
 import React from 'react';
 import { createContext, useReducer } from 'react';
+
 import { AppContextInterface } from '../interfaces/appInterfaces';
 import { appReducer } from '../reducer/appReducer';
+import { getDateFromDateObj } from '../helpers/helpersManager';
 
 
 
 
 const initialValues: AppContextInterface = {
-    daySelected: new Date(),
+    daySelected: getDateFromDateObj(new Date()) ,
     dateTimeToModal: {
         dateM: '--:-- am/pm',
         startTimeM: '--:-- am/pm',
     },
     activities: [],
     activitySelected: null,
-    view: 'D',
 }
 
 export const AppContext = createContext<AppContextInterface>( initialValues )

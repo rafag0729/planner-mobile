@@ -1,20 +1,19 @@
 // AppContext
 
 export interface AppContextInterface {
-    daySelected: Date;
+    daySelected: DateSpecs;
     dateTimeToModal: {
         dateM: string;
         startTimeM: string;
     };
     activities: Activity[];
     activitySelected: Activity | null;
-    view: ScreenView;
     user?: User;
     dispatcher?: any
 }
 
 export type AppActions = 
-    | { type: 'Set date', payload: Date }
+    | { type: 'Set date', payload: DateSpecs }
     
     | { type: 'Load activities', payload: Activity[] }
     | { type: 'Add a new activity', payload: ActivityToSubmit }

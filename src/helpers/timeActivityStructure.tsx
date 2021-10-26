@@ -43,11 +43,11 @@ export const hourActivityStructure = (days: DateSpecs[], activities: Activity[] 
 }
 
 
-export const monthlyDayActivityStructure = (daySelected: Date, activities: Activity[] ): ActivityPerDayForMonth[] => {
+export const monthlyDayActivityStructure = (daySelected: DateSpecs, activities: Activity[] ): ActivityPerDayForMonth[] => {
     
     let days: ActivityPerDayForMonth[] = [];
 
-    const { monthNumber, year } = getDateFromDateObj( daySelected );
+    const { monthNumber, year } = daySelected;
     let initialDate: Date = new Date(year, monthNumber);
     let dateToWork: Date = new Date(year, monthNumber, 1);
 

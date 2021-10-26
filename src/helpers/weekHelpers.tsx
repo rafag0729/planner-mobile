@@ -23,7 +23,7 @@ export const buildingWeek = (date: Date): WeekData => {
         weekToBuild.weekObj.push( getDateFromDateObj(day) );
         weekToBuild.weekStr.push( dateFormatted(getDateFromDateObj(day)) );
     }
-
+    
     return weekToBuild;
 }
 

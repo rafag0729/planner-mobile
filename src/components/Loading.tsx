@@ -1,6 +1,6 @@
 import React from 'react';
-import { ActivityIndicator, View } from 'react-native';
-import { colors } from '../styles/generalStyles';
+import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
+import { colors, fontFamily } from '../styles/generalStyles';
 
 
 
@@ -12,6 +12,16 @@ export const Loading = () => {
                 size={ 60 }
                 color={ colors.lightBlue }
                 />
+
+            <Text style={ styles.loadingText }>Cargando actividades...</Text>
         </View>
     )
 }
+
+const styles = StyleSheet.create({
+    loadingText: {
+        textAlign: 'center',
+        fontFamily: fontFamily.light,
+        marginTop: 20
+    }
+});

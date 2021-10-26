@@ -4,9 +4,8 @@ import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-nati
 import { DateSpecs, DayStructure } from '../interfaces/appInterfaces';
 import { setDateTimeToModal } from '../reducer/appActions';
 import { AppContext, ModalsContext } from '../contexts/contextsManager';
-import { ActivityNote, Loading } from '../shared/componentsManager';
-import { useActivityPetition } from '../hooks/hooksManager';
-import { hourActivityStructure, dateFormatted, getDateFromDateObj, buildingWeek, getWorkDays } from '../helpers/helpersManager';
+import { ActivityNote } from '../shared/componentsManager';
+import { hourActivityStructure, dateFormatted, dateSpectsToSystemDate, buildingWeek, getWorkDays } from '../helpers/helpersManager';
 import { colors, fontFamily } from '../styles/generalStyles';
 
 
@@ -16,30 +15,20 @@ export const WeeklySchedule = () => {
 
     const { activities, daySelected, dispatcher } = useContext(AppContext)
     const { setIsOpen, setModalType } = useContext(ModalsContext)
-    const { isLoading, loadActivities } = useActivityPetition()
     const [ dayHourActivityStructure, setDayHourActivityStructure ] = useState<DayStructure[]>([])
-    const [week, setWeek] = useState<DateSpecs[]>([])
 
     useEffect(() => {
-        loadActivities('week')
-    }, [daySelected])
-
-    useEffect(() => {
-        const { weekObj } = getWorkDays( buildingWeek(daySelected) );
+        const { weekObj } = getWorkDays( buildingWeek( dateSpectsToSystemDate(daySelected)) );
         const structure = hourActivityStructure( weekObj , activities )
         setDayHourActivityStructure( structure )
     }, [daySelected])
     
 
-    const showCreateModal = (date: Date, time: string) => {
-        const dateM = dateFormatted( getDateFromDateObj(date) )
+    const showCreateModal = (date: DateSpecs, time: string) => {
+        const dateM = dateFormatted( date )
         dispatcher(setDateTimeToModal( dateM, time))
         setModalType('create');
         setIsOpen(true);
-    }
-
-    if(isLoading){
-        return <Loading />
     }
 
     return (

@@ -5,7 +5,7 @@ import { ScrollView, StyleSheet, Text, View, TouchableOpacity } from 'react-nati
 import { ActivityPerDayForMonth, DateSpecs } from '../interfaces/appInterfaces';
 import { AppContext } from '../contexts/contextsManager';
 import { setDate } from '../reducer/appActions';
-import { Loading, ActivityStick } from '../shared/componentsManager';
+import { ActivityStick } from '../shared/componentsManager';
 import { useActivityPetition } from '../hooks/hooksManager';
 import { monthlyDayActivityStructure} from '../helpers/helpersManager';
 import { colors, fontFamily } from '../styles/generalStyles';
@@ -16,27 +16,21 @@ export const MonthlySchedule = () => {
 
     const navigation = useNavigation()
     const {activities, daySelected, dispatcher} = useContext(AppContext)
-    const {isLoading, loadActivities} = useActivityPetition()
     const [monthActivities, setMonthActivities] = useState<ActivityPerDayForMonth[]>([])
     const [initialDate, setInitialDate] = useState( new Date() )
     
     useEffect(() => {
-        loadActivities('month')
         const monthStructure = monthlyDayActivityStructure( daySelected, activities );
         setMonthActivities( monthStructure )
         setInitialDate( new Date(monthStructure[0].day.year, monthStructure[0].day.monthNumber, monthStructure[0].day.day) )
-    }, [daySelected])
+    }, [daySelected.monthNumber, activities])
 
     const navigateToDateScreen = (date: DateSpecs) => {
         const dateToGo = new Date( date.year, date.monthNumber, date.day )
         dispatcher( setDate( dateToGo ) )
         navigation.navigate('DailyScreen' as any)        
     }
-
-    if(isLoading){
-        return <Loading />
-    }
-
+    
     return (
         <ScrollView
             style={{ marginTop: 25 }}

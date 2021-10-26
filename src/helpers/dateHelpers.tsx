@@ -21,6 +21,14 @@ export const getDateFromDateObj = ( date: Date ): DateSpecs => {
     }
 }
 
+export const dateSpectsToSystemDate = (date: DateSpecs): Date => {
+
+    const {day, monthNumber, year} = date;
+    const systemDate = new Date(year, monthNumber, day);
+
+    return systemDate;
+}
+
 export const dateFormatted = ({ day, monthNumber, year}: DateSpecs): string => {
 
     return `${day}-${monthNumber+1}-${year}`;

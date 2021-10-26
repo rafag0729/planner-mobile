@@ -1,4 +1,4 @@
-import { getDateFromDateObj, dateFormatted } from './dateHelpers';
+import { getDateFromDateObj, dateFormatted, dateSpectsToSystemDate } from './dateHelpers';
 import { hourActivityStructure, monthlyDayActivityStructure } from "./timeActivityStructure";
 import { getActivitySpecs } from "./getActivitySpecs";
 import { getHourFromDateObj, getHourFromString, timeFormatted } from './timeHelpers';
@@ -11,6 +11,7 @@ import { getMonthDays } from './monthHelpers';
 
 export {
     getDateFromDateObj,
+    dateSpectsToSystemDate,
     timeFormatted,
     getHourFromDateObj,
     getHourFromString,

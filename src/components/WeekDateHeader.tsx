@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from 'react-native';
 
 import { DateSpecs } from '../interfaces/appInterfaces';
 import { AppContext } from '../contexts/contextsManager';
-import { getDateFromDateObj, buildingWeek } from '../helpers/helpersManager';
+import { getDateFromDateObj, buildingWeek, dateSpectsToSystemDate } from '../helpers/helpersManager';
 import { colors, fontFamily } from '../styles/generalStyles';
 
 
@@ -16,12 +16,11 @@ export const WeekDateHeaders = () => {
     const [week, setWeek] = useState<DateSpecs[]>([])
 
     useEffect(() => {   
-        const { monthName, year } = getDateFromDateObj( daySelected );
-        const { weekObj } = buildingWeek( daySelected )
+        const { weekObj } = buildingWeek( dateSpectsToSystemDate(daySelected) )
         setDate({
             ...date,
-            monthName,
-            year
+            monthName: daySelected.monthName,
+            year: daySelected.year
         })
         setWeek( weekObj )
     }, [daySelected])

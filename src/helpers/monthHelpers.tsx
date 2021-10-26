@@ -1,11 +1,12 @@
+import { DateSpecs } from "../interfaces/appInterfaces";
 import { dateFormatted, getDateFromDateObj } from "./helpersManager";
 
 
 
 
-export const getMonthDays = (date: Date) => {
+export const getMonthDays = (date: DateSpecs) => {
 
-    const { monthNumber, year } = getDateFromDateObj( date );
+    const { monthNumber, year } = date;
     let initialDate: Date = new Date(year, monthNumber);
     let dateToWork: Date = new Date(year, monthNumber, 1);
 
@@ -29,5 +30,5 @@ export const getMonthDays = (date: Date) => {
         }
     }
 
-        return [firstPackOfDays, secondPackOfDays, thirdPackOfDays];
+    return [firstPackOfDays, secondPackOfDays, thirdPackOfDays];
 }

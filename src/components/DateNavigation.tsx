@@ -5,7 +5,7 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { ScreenView } from './../interfaces/appInterfaces'
 import { AppContext } from '../contexts/contextsManager';
 import { setDate } from '../reducer/appActions';
-import { getDateFromDateObj, buildingWeek } from '../helpers/helpersManager';
+import { buildingWeek, dateSpectsToSystemDate } from '../helpers/helpersManager';
 import { CalendarIcon, NavigationArrow } from '../shared/assetsManager';
 import { colors, fontFamily } from '../styles/generalStyles';
  
@@ -28,14 +28,14 @@ export const DateNavigation = ( { view }: Props ) => {
 
 
     const checkingTodayEquality = () => {
-        const dateState = daySelected;
+        const { day, monthNumber, year } = daySelected;
         const actualDate = new Date();
-        const dateStateFormatted = new Date(dateState.getFullYear(), dateState.getMonth(), dateState.getDate()).getTime();
+        const dateStateFormatted = new Date(year, monthNumber, day).getTime();
         const actualDateFormatted = new Date(actualDate.getFullYear(), actualDate.getMonth(), actualDate.getDate()).getTime();
         if(view === 'M') {
-            (dateState.getMonth() === actualDate.getMonth() && dateState.getMonth() === actualDate.getMonth() ) ? setTodayStatus(true) : setTodayStatus(false);
+            (monthNumber === actualDate.getMonth() && year === actualDate.getFullYear() ) ? setTodayStatus(true) : setTodayStatus(false);
         }else if( view === 'W'){
-            const { weekObj } = buildingWeek(daySelected)
+            const { weekObj } = buildingWeek( dateSpectsToSystemDate(daySelected) )
             if(weekObj.filter(d => d.day == actualDate.getDate() && d.monthNumber === actualDate.getMonth() && d.year === actualDate.getFullYear() ).length >= 1) {
                 setTodayStatus(true)
             }else{
@@ -55,7 +55,7 @@ export const DateNavigation = ( { view }: Props ) => {
     }
 
     const handleDateChangeByArrow = (operation: 'add' | 'subtract') => {
-        let { day, monthNumber, year } = getDateFromDateObj( daySelected );
+        let { day, monthNumber, year } = daySelected;
         if(view === 'D'){
             operation === 'add' ? day++ : day--;
         }
@@ -109,7 +109,7 @@ export const DateNavigation = ( { view }: Props ) => {
 
             {   pickerStatus && (
                 <DateTimePicker
-                    value={ daySelected }
+                    value={ dateSpectsToSystemDate(daySelected) }
                     /* mode={mode}
                     is24Hour={true}
                     display="default" */

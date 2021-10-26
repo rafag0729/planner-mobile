@@ -1,12 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
-import { DayStructure } from '../interfaces/appInterfaces';
+import { DayStructure, DateSpecs } from '../interfaces/appInterfaces';
 import { setDateTimeToModal } from '../reducer/appActions';
 import { AppContext, ModalsContext } from '../contexts/contextsManager';
-import { ActivityNote, Loading } from './../shared/componentsManager';
-import { useActivityPetition } from '../hooks/hooksManager';
-import { hourActivityStructure, dateFormatted, getDateFromDateObj} from '../helpers/helpersManager';
+import { ActivityNote } from './../shared/componentsManager';
+import { hourActivityStructure, dateFormatted } from '../helpers/helpersManager';
 import { colors, fontFamily } from '../styles/generalStyles';
 
 
@@ -16,30 +15,20 @@ export const DailySchedule = () => {
 
     const { activities, daySelected, dispatcher } = useContext(AppContext)
     const { setIsOpen, setModalType } = useContext(ModalsContext)
-    const { isLoading, loadActivities } = useActivityPetition()
     const [ dayHourActivityStructure, setDayHourActivityStructure ] = useState<DayStructure[]>([])
-    
-    useEffect(() => {
-        loadActivities('day')
-    }, [daySelected])
-    
     
     /* Building structure of the hour and activity */
     useEffect(() => {
-        const structure = hourActivityStructure( [ getDateFromDateObj(daySelected) ], activities )
+        const structure = hourActivityStructure( [ daySelected ], activities )
         setDayHourActivityStructure( structure )
     }, [activities])
 
     
-    const showCreateModal = (date: Date, time: string) => {
-        const dateM = dateFormatted( getDateFromDateObj(date) )
+    const showCreateModal = (date: DateSpecs, time: string) => {
+        const dateM = dateFormatted( date )
         dispatcher(setDateTimeToModal( dateM, time))
         setModalType('create');
         setIsOpen(true);
-    }
-
-    if(isLoading){
-        return <Loading />
     }
 
     return (

@@ -5,7 +5,7 @@ import { Activity, ProjectInterface, RespType, ActivityToSubmit } from '../inter
 import { addNewActivity, loadDBActivities } from '../reducer/appActions';
 import { AppContext, ModalsContext } from '../contexts/contextsManager';
 import { useMoveModalAnimation } from "./hooksManager";
-import { getMonthDays, dateFormatted, getDateFromDateObj, buildingWeek, getWorkDays } from '../helpers/helpersManager';
+import { getMonthDays } from '../helpers/helpersManager';
 
 
 
@@ -21,7 +21,7 @@ export const useActivityPetition = () => {
     const [isLoading, setIsLoading] = useState<boolean>(true);
 
     
-    const loadActivities = async(view: 'day' | 'week' | 'month') => {
+    const loadActivities = async() => {
         setIsLoading(true);
         try {
             const respProjects = await firestore().collection('projects').get();
@@ -37,48 +37,20 @@ export const useActivityPetition = () => {
             })
 
             let activities: Activity[] = [];
-            let respActivities;
-
-            switch (view) {
-                case 'day':
-                    respActivities = await firestore().collection('users/vC37t4OJ5DWQ7yPvf3RC/activities').where('day','==',dateFormatted(getDateFromDateObj(daySelected))).get();
-                    respActivities.docs.forEach(d => {
-                        const { projectName, activityType, description, day, endTime, startTime } = d.data()
-                        activities.push({ 
-                            projectName: projects.current.filter( p => p.id === projectName)[0],
-                            activityType: projectTypes.current.filter( p => p.id === activityType)[0],
-                            description, day, endTime, startTime, id: d.id })
-                    })
-                    break;
-
-                case 'week':
-                    const daysOfWeek = getWorkDays( buildingWeek(daySelected) ).weekStr;
-                    respActivities = await firestore().collection('users/vC37t4OJ5DWQ7yPvf3RC/activities').where('day', 'in', daysOfWeek).get();
-                    respActivities.docs.forEach(a => {
-                        const { projectName, activityType, description, day, endTime, startTime } = a.data()
-                        activities.push({ 
-                            projectName: projects.current.filter( p => p.id === projectName)[0],
-                            activityType: projectTypes.current.filter( p => p.id === activityType)[0],
-                            description, day, endTime, startTime, id: a.id })
-                    });
-                    break;
-
-                case 'month':
-                    const [ firstDays, secondDays, thirdDays ] = getMonthDays(daySelected);
-                    const firstPromise = firestore().collection('users/vC37t4OJ5DWQ7yPvf3RC/activities').where('day', 'in', firstDays ).get();
-                    const secondPromise = firestore().collection('users/vC37t4OJ5DWQ7yPvf3RC/activities').where('day', 'in', secondDays ).get();
-                    const thirdPromise = firestore().collection('users/vC37t4OJ5DWQ7yPvf3RC/activities').where('day', 'in', thirdDays ).get();
-                    let promises = await Promise.all( [firstPromise, secondPromise, thirdPromise] )
-                    promises.forEach(p => p.docs.forEach(d => {
-                        const { projectName, activityType, description, day, endTime, startTime } = d.data();
-                        activities.push({ 
-                            projectName: projects.current.filter( p => p.id === projectName)[0],
-                            activityType: projectTypes.current.filter( p => p.id === activityType)[0],
-                            description, day, endTime, startTime, id: d.id })
-                    }))
-                    break;
-            }
-
+            
+            const [ firstDays, secondDays, thirdDays ] = getMonthDays(daySelected);
+            const firstPromise = firestore().collection('users/vC37t4OJ5DWQ7yPvf3RC/activities').where('day', 'in', firstDays ).get();
+            const secondPromise = firestore().collection('users/vC37t4OJ5DWQ7yPvf3RC/activities').where('day', 'in', secondDays ).get();
+            const thirdPromise = firestore().collection('users/vC37t4OJ5DWQ7yPvf3RC/activities').where('day', 'in', thirdDays ).get();
+            let promises = await Promise.all( [firstPromise, secondPromise, thirdPromise] )
+            promises.forEach(p => p.docs.forEach(d => {
+                const { projectName, activityType, description, day, endTime, startTime } = d.data();
+                activities.push({ 
+                    projectName: projects.current.filter( p => p.id === projectName)[0],
+                    activityType: projectTypes.current.filter( p => p.id === activityType)[0],
+                    description, day, endTime, startTime, id: d.id })
+            }))
+            
             dispatcher( loadDBActivities( activities ) )
             setIsLoading(false)
             
