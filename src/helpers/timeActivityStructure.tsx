@@ -9,8 +9,11 @@ import { dateFormatted, getDateFromDateObj } from './helpersManager';
 export const hourActivityStructure = (days: DateSpecs[], activities: Activity[] ): DayStructure[] => {
     
     let dayActivity: DayStructure[] = [];
+
+    /* console.log({days}) */
+
     
-    for( let i = 0; i < days.length; i++ ){
+    for( let idx = 0; idx < days.length; idx++ ){
 
         let hourStructure: DayActivity[] = [];
 
@@ -21,7 +24,9 @@ export const hourActivityStructure = (days: DateSpecs[], activities: Activity[] 
             if(activities){
                 activities.forEach((a) => {
                     const splitHour = a.startTime.split(':');
-                    if (Number(splitHour[0]) === militaryHours[i] ){
+                    const splitDay = a.day.split('-');
+                    if (Number(splitHour[0]) === militaryHours[i] && Number(splitDay[0]) === days[idx].day && Number(splitDay[1]) === days[idx].monthNumber+1 && Number(splitDay[2]) === days[idx].year   ){
+                        
                         activitiesList.push({ ...a })
                     }
                 })
@@ -34,10 +39,12 @@ export const hourActivityStructure = (days: DateSpecs[], activities: Activity[] 
         }
 
         dayActivity.push({
-            date: days[i],
+            date: days[idx],
             dayHourStructure: hourStructure
         })
     }
+
+    console.log(dayActivity[0].dayHourStructure)
 
     return dayActivity;
 }
