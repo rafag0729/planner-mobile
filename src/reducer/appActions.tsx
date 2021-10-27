@@ -27,7 +27,7 @@ export const loadDBActivities = ( activities: Activity[]): AppActions => {
 }
 
 
-export const addNewActivity = ( activity: ActivityToSubmit): AppActions => {
+export const addNewActivity = ( activity: Activity): AppActions => {
     return {
         type: 'Add a new activity',
         payload: activity

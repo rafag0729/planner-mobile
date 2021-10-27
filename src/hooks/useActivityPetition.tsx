@@ -1,5 +1,5 @@
 import firestore from '@react-native-firebase/firestore';
-import { useContext, useRef, useState } from "react"
+import { useContext, useEffect, useRef, useState } from "react"
 
 import { Activity, ProjectInterface, RespType, ActivityToSubmit } from '../interfaces/appInterfaces';
 import { addNewActivity, loadDBActivities } from '../reducer/appActions';
@@ -15,14 +15,16 @@ export const useActivityPetition = () => {
     const { daySelected, dispatcher }  = useContext(AppContext);
     const { setIsOpen } = useContext(ModalsContext);
     const { modalPosition, moveToRight } = useMoveModalAnimation();
-    const projects = useRef<ProjectInterface[]>([]);;
-    const projectTypes = useRef<ProjectInterface[]>([]);
+    let projects = useRef<ProjectInterface[]>([]);;
+    let projectTypes = useRef<ProjectInterface[]>([]);
     const [respType, setRespType] = useState<RespType>('failed');
     const [isLoading, setIsLoading] = useState<boolean>(true);
 
-    
-    const loadActivities = async() => {
-        setIsLoading(true);
+    useEffect(() => {
+        loadResources();
+    }, [])
+
+    const loadResources = async() => {
         try {
             const respProjects = await firestore().collection('projects').get();
             const respProjectTypes = await firestore().collection('projectTypes').get();
@@ -35,7 +37,16 @@ export const useActivityPetition = () => {
                 const { name } = d.data();
                 projectTypes.current.push({ id: d.id, name })
             })
+        } catch (error) {
+            console.log('Error getting projectsInfo and projectTypes: ', error)
+        }
+    }
 
+    
+    const loadActivities = async() => {
+        setIsLoading(true);
+        try {
+            await loadResources(); 
             let activities: Activity[] = [];
             
             const [ firstDays, secondDays, thirdDays ] = getMonthDays(daySelected);
@@ -71,8 +82,16 @@ export const useActivityPetition = () => {
     const createActivity = async(activity: ActivityToSubmit) => {
         moveToRight( 1 ) ;
         try {
-            const resp = await firestore().collection('users/vC37t4OJ5DWQ7yPvf3RC/activities').add({...activity });    
-            dispatcher( addNewActivity({...activity, id: resp.id}) );
+            await loadResources()
+            /* const resp = await firestore().collection('users/vC37t4OJ5DWQ7yPvf3RC/activities').add({...activity });     */
+            let activityReducer = {
+                ...activity,
+                id: 'dmkdmskmdkdsm',
+                projectName: projects.current.filter(p => p.id === activity.id )[0],
+                activityType: projectTypes.current.filter(t => t.id === activity.id)[0]
+            }
+            
+            dispatcher( addNewActivity( activityReducer ) );
             setRespType('success');
             
             setTimeout(() => {

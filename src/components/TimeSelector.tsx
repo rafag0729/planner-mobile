@@ -31,6 +31,7 @@ export const TimeSelector = ({ settingHour, timerText, text}: Props) => {
         {   pickerStatus && (
                 <DateTimePicker 
                     mode='time'
+                    is24Hour={ true }
                     minuteInterval={ 15 }
                     value={ new Date() }
                     onChange={ (e: AndroidEvent, date: Date | undefined) => {

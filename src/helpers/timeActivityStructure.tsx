@@ -10,9 +10,6 @@ export const hourActivityStructure = (days: DateSpecs[], activities: Activity[] 
     
     let dayActivity: DayStructure[] = [];
 
-    /* console.log({days}) */
-
-    
     for( let idx = 0; idx < days.length; idx++ ){
 
         let hourStructure: DayActivity[] = [];
@@ -43,8 +40,6 @@ export const hourActivityStructure = (days: DateSpecs[], activities: Activity[] 
             dayHourStructure: hourStructure
         })
     }
-
-    console.log(dayActivity[0].dayHourStructure)
 
     return dayActivity;
 }

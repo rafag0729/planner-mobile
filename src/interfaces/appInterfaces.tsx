@@ -16,8 +16,8 @@ export type AppActions =
     | { type: 'Set date', payload: DateSpecs }
     
     | { type: 'Load activities', payload: Activity[] }
-    | { type: 'Add a new activity', payload: ActivityToSubmit }
-    | { type: 'Update an activity', payload: ActivityToSubmit }
+    | { type: 'Add a new activity', payload: Activity }
+    | { type: 'Update an activity', payload: Activity }
     | { type: 'Remove activity', payload: string }
 
     | { type: 'Add date-startTime  to Modal', payload: { date: string, startTime: string} }

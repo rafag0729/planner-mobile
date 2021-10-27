@@ -27,14 +27,14 @@ export const appReducer = ( state: AppContextInterface, action: AppActions ): Ap
                 activities: action.payload
             }
         
-        /* case 'Add a new activity':
+        case 'Add a new activity':
             return {
                 ...state,
                 activities: [
                     ...state.activities,
                     action.payload
                 ]
-            } */
+            }
             
     
         default:

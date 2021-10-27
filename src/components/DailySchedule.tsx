@@ -48,10 +48,10 @@ export const DailySchedule = () => {
                                     <Text style={ styles.textHour }>{ `${ hour }:00 ${hour > 12 ? 'pm' : 'am' }` }</Text>
                                 </View>
                                 <View style={{ flex: 2 }} >
-                                    <TouchableOpacity style={{ flex: 1 }} onLongPress={ () => showCreateModal(daySelected, `${hour < 10 ? '0'+hour.toString() : hour }:00`) }/>
-                                    <TouchableOpacity style={{ flex: 1 }} onLongPress={ () => showCreateModal(daySelected, `${hour < 10 ? '0'+hour.toString() : hour }:15`) }/>
-                                    <TouchableOpacity style={{ flex: 1 }} onLongPress={ () => showCreateModal(daySelected, `${hour < 10 ? '0'+hour.toString() : hour }:30`) }/>
-                                    <TouchableOpacity style={{ flex: 1 }} onLongPress={ () => showCreateModal(daySelected, `${hour < 10 ? '0'+hour.toString() : hour }:45`) }/>
+                                    <TouchableOpacity style={{ flex: 1 }} onLongPress={ () => showCreateModal(daySelected, `${hour < 10 ? '0'+hour.toString() : hour }:00`) } delayLongPress={ 500 }/>
+                                    <TouchableOpacity style={{ flex: 1 }} onLongPress={ () => showCreateModal(daySelected, `${hour < 10 ? '0'+hour.toString() : hour }:15`) } delayLongPress={ 500 }/>
+                                    <TouchableOpacity style={{ flex: 1 }} onLongPress={ () => showCreateModal(daySelected, `${hour < 10 ? '0'+hour.toString() : hour }:30`) } delayLongPress={ 500 }/>
+                                    <TouchableOpacity style={{ flex: 1 }} onLongPress={ () => showCreateModal(daySelected, `${hour < 10 ? '0'+hour.toString() : hour }:45`) } delayLongPress={ 500 }/>
         
                                     {   activity.map(a => (
                                             <ActivityNote 

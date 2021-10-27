@@ -19,8 +19,8 @@ export const WeeklySchedule = () => {
 
     useEffect(() => {
         const { weekObj } = getWorkDays( buildingWeek( dateSpectsToSystemDate(daySelected)) );
-        const structure = hourActivityStructure( weekObj , activities )
-        setDayHourActivityStructure( structure )
+        const structure = hourActivityStructure( weekObj, activities );
+        setDayHourActivityStructure( structure );
     }, [daySelected])
     
 
