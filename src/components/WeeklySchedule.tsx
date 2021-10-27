@@ -6,6 +6,7 @@ import { setDateTimeToModal } from '../reducer/appActions';
 import { AppContext, ModalsContext } from '../contexts/contextsManager';
 import { ActivityNote } from '../shared/componentsManager';
 import { hourActivityStructure, dateFormatted, dateSpectsToSystemDate, buildingWeek, getWorkDays } from '../helpers/helpersManager';
+import { militaryHours } from '../data/dateTimeData';
 import { colors, fontFamily } from '../styles/generalStyles';
 
 
@@ -21,7 +22,7 @@ export const WeeklySchedule = () => {
         const { weekObj } = getWorkDays( buildingWeek( dateSpectsToSystemDate(daySelected)) );
         const structure = hourActivityStructure( weekObj, activities );
         setDayHourActivityStructure( structure );
-    }, [daySelected])
+    }, [daySelected, activities])
     
 
     const showCreateModal = (date: DateSpecs, time: string) => {
@@ -42,34 +43,27 @@ export const WeeklySchedule = () => {
                 horizontal
                 showsHorizontalScrollIndicator={ false }
                 >
-                {   dayHourActivityStructure.map(({date, dayHourStructure}, i) => (
+                    {   dayHourActivityStructure.map(({date, activitiesOfDate}, i) => (
                         <View
-                            key={ i.toString() }
+                            key={ i.toString()+date.monthNumber+'D' }
                             >
                             <View style={ styles.dayHeaderContainer } >
                                 <Text style={ styles.dayHeaderText }>{ `${date.dayName} - ${date.day}` }</Text>
                             </View>
 
-                            {   dayHourStructure.map(({hour, activity}, i) => (
+                            { /* Each activity */ }
+                            {   activitiesOfDate.map(a => <ActivityNote key={ i.toString() + a.id } view='W' activity={ a } />) }
+
+                            {   militaryHours.map((h, i) => (
                                     <View 
-                                        key={ i.toString() } 
+                                        key={ (i+h).toString() + 'H' } 
                                         style={ styles.calendarHourContainer}
                                         >
-                                        <View style={{ flex: 2 }} >
-                                        <Text style={ styles.textHour }>{ `${ hour }:00 ${hour > 12 ? 'pm' : 'am' }` }</Text>
-                                            <TouchableOpacity style={{ flex: 1}} onPress={ () => showCreateModal(daySelected, `${hour < 10 ? '0'+hour.toString() : hour }:00`) }/>
-                                            <TouchableOpacity style={{ flex: 1 }} onPress={ () => showCreateModal(daySelected, `${hour < 10 ? '0'+hour.toString() : hour }:15`) }/>
-                                            <TouchableOpacity style={{ flex: 1 }} onPress={ () => showCreateModal(daySelected, `${hour < 10 ? '0'+hour.toString() : hour }:30`) }/>
-                                            <TouchableOpacity style={{ flex: 1 }} onPress={ () => showCreateModal(daySelected, `${hour < 10 ? '0'+hour.toString() : hour }:45`) }/>
-                
-                                            {   activity.map(a => (
-                                                    <ActivityNote 
-                                                        key={ a.id }
-                                                        activity={ a }
-                                                        />  
-                                                ))
-                                            }
-                                        </View>
+                                            <Text style={ styles.textHour }>{ `${ h }:00 ${h > 12 ? 'pm' : 'am' }` }</Text>
+                                        <TouchableOpacity style={{ flex: 1 }} onLongPress={ () => showCreateModal(daySelected, `${h < 10 ? '0'+h.toString() : h }:00`) } delayLongPress={ 500 }/>
+                                        <TouchableOpacity style={{ flex: 1 }} onLongPress={ () => showCreateModal(daySelected, `${h < 10 ? '0'+h.toString() : h }:15`) } delayLongPress={ 500 }/>
+                                        <TouchableOpacity style={{ flex: 1 }} onLongPress={ () => showCreateModal(daySelected, `${h < 10 ? '0'+h.toString() : h }:30`) } delayLongPress={ 500 }/>
+                                        <TouchableOpacity style={{ flex: 1 }} onLongPress={ () => showCreateModal(daySelected, `${h < 10 ? '0'+h.toString() : h }:45`) } delayLongPress={ 500 }/>
                                     </View>
                                 ))
                             }
@@ -100,13 +94,9 @@ const styles = StyleSheet.create({
         fontSize: 14
     },
     calendarHourContainer: {
-        position: 'relative',
-        zIndex: 0,
-        elevation: 0,
         height: 100,
         borderBottomWidth: .5,
         borderBottomColor: colors.lightGrey,
-        flexDirection: 'row'
     },
     textHour: {
         fontFamily: fontFamily.bold,

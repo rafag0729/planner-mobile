@@ -1,5 +1,5 @@
 import firestore from '@react-native-firebase/firestore';
-import { useContext, useEffect, useRef, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 
 import { Activity, ProjectInterface, RespType, ActivityToSubmit } from '../interfaces/appInterfaces';
 import { addNewActivity, loadDBActivities } from '../reducer/appActions';
@@ -15,8 +15,6 @@ export const useActivityPetition = () => {
     const { daySelected, dispatcher }  = useContext(AppContext);
     const { setIsOpen } = useContext(ModalsContext);
     const { modalPosition, moveToRight } = useMoveModalAnimation();
-    let projects = useRef<ProjectInterface[]>([]);;
-    let projectTypes = useRef<ProjectInterface[]>([]);
     const [respType, setRespType] = useState<RespType>('failed');
     const [isLoading, setIsLoading] = useState<boolean>(true);
 
@@ -25,28 +23,34 @@ export const useActivityPetition = () => {
     }, [])
 
     const loadResources = async() => {
+
+        let projects: ProjectInterface[] = [];
+        let projectTypes: ProjectInterface[] = [];
+
         try {
             const respProjects = await firestore().collection('projects').get();
             const respProjectTypes = await firestore().collection('projectTypes').get();
             
             respProjects.docs.forEach(d => {
                 const { color, name } = d.data();
-                projects.current.push({ id: d.id, name, color })
+                projects.push({ id: d.id, name, color })
             })
             respProjectTypes.docs.forEach(d => {
                 const { name } = d.data();
-                projectTypes.current.push({ id: d.id, name })
+                projectTypes.push({ id: d.id, name })
             })
         } catch (error) {
             console.log('Error getting projectsInfo and projectTypes: ', error)
         }
+
+        return { projects, projectTypes }
     }
 
     
     const loadActivities = async() => {
         setIsLoading(true);
         try {
-            await loadResources(); 
+            const { projects, projectTypes } = await loadResources(); 
             let activities: Activity[] = [];
             
             const [ firstDays, secondDays, thirdDays ] = getMonthDays(daySelected);
@@ -57,8 +61,8 @@ export const useActivityPetition = () => {
             promises.forEach(p => p.docs.forEach(d => {
                 const { projectName, activityType, description, day, endTime, startTime } = d.data();
                 activities.push({ 
-                    projectName: projects.current.filter( p => p.id === projectName)[0],
-                    activityType: projectTypes.current.filter( p => p.id === activityType)[0],
+                    projectName: projects.filter( p => p.id === projectName)[0],
+                    activityType: projectTypes.filter( p => p.id === activityType)[0],
                     description, day, endTime, startTime, id: d.id })
             }))
             
@@ -82,13 +86,13 @@ export const useActivityPetition = () => {
     const createActivity = async(activity: ActivityToSubmit) => {
         moveToRight( 1 ) ;
         try {
-            await loadResources()
-            /* const resp = await firestore().collection('users/vC37t4OJ5DWQ7yPvf3RC/activities').add({...activity });     */
+            const { projects, projectTypes } = await loadResources()
+            const resp = await firestore().collection('users/vC37t4OJ5DWQ7yPvf3RC/activities').add({...activity });
             let activityReducer = {
                 ...activity,
-                id: 'dmkdmskmdkdsm',
-                projectName: projects.current.filter(p => p.id === activity.id )[0],
-                activityType: projectTypes.current.filter(t => t.id === activity.id)[0]
+                id: resp.id,
+                projectName: projects.filter(p => p.id === activity.projectName )[0],
+                activityType: projectTypes.filter(t => t.id === activity.activityType)[0]
             }
             
             dispatcher( addNewActivity( activityReducer ) );

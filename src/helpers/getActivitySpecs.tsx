@@ -17,11 +17,12 @@ export const getActivitySpecs = ({ activityType, day, description, endTime, star
 
 const getActivityPosition = ( startTime: string ):number => {
     
-    const { minutes } = getHourFromString( startTime );
+    const { hour, minutes } = getHourFromString( startTime );
+    
+    const positionHour = (Number(hour) - 7) * 4;
+    const positionMinute = Number(minutes) / 15;
 
-    const position = Number(minutes) / 15;
-
-    return position;
+    return positionHour + positionMinute;
 }
 
 const getActivityLength = ( startTime: string, endTime: string ): number => {

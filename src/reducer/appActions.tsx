@@ -1,4 +1,4 @@
-import { AppActions, Activity, ActivityToSubmit } from '../interfaces/appInterfaces';
+import { AppActions, Activity } from '../interfaces/appInterfaces';
 import { getDateFromDateObj } from '../helpers/dateHelpers';
 
 
@@ -13,7 +13,7 @@ export const setDate = ( date: Date): AppActions => {
 
 export const setDateTimeToModal = ( date: string, startTime: string ): AppActions => {
     return {
-        type: 'Add date-startTime  to Modal',
+        type: 'Add date-startTime to Modal',
         payload: { date, startTime }
     }
 }

@@ -20,7 +20,7 @@ export type AppActions =
     | { type: 'Update an activity', payload: Activity }
     | { type: 'Remove activity', payload: string }
 
-    | { type: 'Add date-startTime  to Modal', payload: { date: string, startTime: string} }
+    | { type: 'Add date-startTime to Modal', payload: { date: string, startTime: string} }
     
 
 // View
@@ -45,7 +45,7 @@ export type TimeSpecs = {
 
 // Activities
 export interface Activity {
-    id?: string | null;
+    id: string;
     projectName: ProjectInterface;
     activityType: ProjectInterface;
     description: string;
@@ -68,13 +68,9 @@ export interface ActivityToSubmit {
 // Days - activities structure
 export interface DayStructure {
     date: DateSpecs;
-    dayHourStructure: DayActivity[]
+    activitiesOfDate: Activity[];
 }
 
-export interface DayActivity {
-    hour: number;
-    activity: Activity[]
-}
 
 // Week
 export interface WeekData {

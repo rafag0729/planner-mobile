@@ -1,5 +1,4 @@
-import { Activity, DayActivity, DayStructure, DateSpecs, ActivityPerDayForMonth } from '../interfaces/appInterfaces';
-import { militaryHours } from '../data/dateTimeData';
+import { Activity, DayStructure, DateSpecs, ActivityPerDayForMonth } from '../interfaces/appInterfaces';
 import { dateFormatted, getDateFromDateObj } from './helpersManager';
 
 
@@ -9,35 +8,23 @@ import { dateFormatted, getDateFromDateObj } from './helpersManager';
 export const hourActivityStructure = (days: DateSpecs[], activities: Activity[] ): DayStructure[] => {
     
     let dayActivity: DayStructure[] = [];
+    
 
     for( let idx = 0; idx < days.length; idx++ ){
 
-        let hourStructure: DayActivity[] = [];
-
-        for( let i = 0; i < militaryHours.length; i++){
-
-            let activitiesList: Activity[] = []
-    
-            if(activities){
-                activities.forEach((a) => {
-                    const splitHour = a.startTime.split(':');
-                    const splitDay = a.day.split('-');
-                    if (Number(splitHour[0]) === militaryHours[i] && Number(splitDay[0]) === days[idx].day && Number(splitDay[1]) === days[idx].monthNumber+1 && Number(splitDay[2]) === days[idx].year   ){
-                        
-                        activitiesList.push({ ...a })
-                    }
-                })
-            }
-
-            hourStructure.push({
-                hour: militaryHours[i],
-                activity: activitiesList
+        let activitiesList: Activity[] = []
+        
+        if(activities){
+            activities.forEach((a) => {
+                if(a.day === dateFormatted(days[idx])){
+                    activitiesList.push({ ...a })
+                }
             })
         }
 
         dayActivity.push({
             date: days[idx],
-            dayHourStructure: hourStructure
+            activitiesOfDate: activitiesList,
         })
     }
 
