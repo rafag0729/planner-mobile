@@ -10,6 +10,18 @@ export const appReducer = ( state: AppContextInterface, action: AppActions ): Ap
                 ...state,
                 daySelected: action.payload
             }
+        
+        case 'Select activity':
+            return {
+                ...state,
+                activitySelected: action.payload
+            }
+
+        case 'Unset selected activity':
+            return {
+                ...state,
+                activitySelected: null
+            }
 
         case 'Add date-startTime to Modal':
             return {
@@ -36,11 +48,21 @@ export const appReducer = ( state: AppContextInterface, action: AppActions ): Ap
                 ]
             }
             
+        case 'Update an activity':
+            return {
+                ...state,
+                activities: state.activities.map(sa => {
+                    if(sa.id === action.payload.id){
+                        console.log('match, ', action.payload );
+                        return action.payload;
+                    } else {
+                        return sa
+                    }
+                })
+            }
     
         default:
             return state;
-
-        
     }
 }
 

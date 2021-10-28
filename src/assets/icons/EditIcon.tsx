@@ -1,28 +1,20 @@
 import Svg, { G, Path, Polygon, Rect, SvgProps } from "react-native-svg";
-import React, { useContext } from 'react';
+import React from 'react';
 import { TouchableOpacity } from "react-native";
 
-import { ModalsContext } from '../../contexts/contextsManager';
 
 
 
 interface Props extends SvgProps{
-    size?: number
+    action: () => void;
+    size?: number,
 }
 
-export const EditIcon = ({ size = 22 }: Props) => {
-
-    const {setIsOpen, setModalType} = useContext(ModalsContext)
-
-    const showEditModal = () => {
-        setModalType('edit');
-        setIsOpen(true);
-    }
-
+export const EditIcon = ({ size = 22, action }: Props) => {
     return (
         <TouchableOpacity
             style={{ marginRight: 1}}
-            onPress={ showEditModal }
+            onPress={ action }
             >
             <Svg id="SVGRoot" width={ `${size}px` } height={ `${size}px` } viewBox="0 0 21 21">
                 <G transform="matrix(.625 0 0 .625 -339.91 -226.41)">

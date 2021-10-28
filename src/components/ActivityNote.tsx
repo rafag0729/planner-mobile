@@ -1,10 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
 import { Activity, ScreenView } from '../interfaces/appInterfaces';
+import { AppContext, ModalsContext } from '../contexts/contextsManager';
+import { getActivitySpecs } from '../helpers/helpersManager';
 import { DeleteIcon, EditIcon } from '../shared/assetsManager';
 import { fontFamily } from '../styles/generalStyles';
-import { getActivitySpecs } from '../helpers/helpersManager';
+import { selectActivity } from '../reducer/appActions';
+
 
 
 
@@ -15,6 +18,8 @@ interface Props {
 
 export const ActivityNote = ({ activity, view }: Props) => {
 
+    const {dispatcher} = useContext(AppContext)
+    const {setIsOpen, setModalType} = useContext(ModalsContext)
     const [position, setPosition] = useState<number>(0);
     const [length, setLength] = useState<number>(0);
     
@@ -23,6 +28,13 @@ export const ActivityNote = ({ activity, view }: Props) => {
         setLength( length );
         setPosition( position );
     }, [])
+
+
+    const editActions = (activity: Activity) => {
+        dispatcher( selectActivity( activity ) )
+        setModalType('edit');
+        setIsOpen(true);
+    }
     
 
     return (
@@ -41,7 +53,7 @@ export const ActivityNote = ({ activity, view }: Props) => {
                 </Text>
             </View>
             <View style={ activityStyles.actionsPosition }>
-                <EditIcon size={ 22 } />
+                <EditIcon action={ () => editActions(activity) } size={ 22 } />
                 <DeleteIcon size={ 22 } />
             </View>
         </View>

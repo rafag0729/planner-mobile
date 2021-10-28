@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Animated, Dimensions, KeyboardAvoidingView, Modal, Platform, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
 import { AlertMsgInterface } from '../interfaces/appInterfaces';
+import { unsetActivity } from '../reducer/appActions';
 import { AppContext, ModalsContext } from '../contexts/contextsManager';
 import { TimeSelector, CustomSelector, Loading, CustomAlert, AlertMessage } from './../shared/componentsManager';
 import { useForm, useActivityPetition } from '../hooks/hooksManager';
@@ -15,11 +16,11 @@ const { width } = Dimensions.get('screen')
 
 export const CustomModal = () => {
 
-    const { dateTimeToModal } = useContext(AppContext)
+    const { dateTimeToModal, activitySelected, dispatcher } = useContext(AppContext)
     const { open, setIsOpen, setModalType, type } = useContext(ModalsContext)
     const { modalPosition, respType, submitActivity } = useActivityPetition()
     const { formValues, setFormValues, resetForm, settingHour, handleInputChange } = useForm({
-        id: null,
+        id: '',
         projectName: '',
         activityType: '',
         description: '',
@@ -77,12 +78,30 @@ export const CustomModal = () => {
     }, [formValues.startTime, formValues.endTime])
 
     useEffect(() => {
-        setFormValues({
-            ...formValues,
-            day: dateTimeToModal.dateM,
-            startTime: dateTimeToModal.startTimeM
-        })
-    }, [dateTimeToModal])
+        if(activitySelected){
+            setFormValues({
+                ...formValues,
+                id: activitySelected.id,
+                description: activitySelected.description,
+                day: activitySelected.day,
+                startTime: activitySelected.startTime,
+                endTime: activitySelected.endTime,
+                projectName: activitySelected.projectName.id,
+                activityType: activitySelected.activityType.id
+            })
+        } else {
+            setFormValues({
+                ...formValues,
+                id: '',
+                description: '',
+                endTime: '',
+                projectName: '',
+                activityType: '',
+                day: dateTimeToModal.dateM,
+                startTime: dateTimeToModal.startTimeM
+            })
+        }
+    }, [dateTimeToModal, activitySelected])
 
 
     const validatePetition = () => {
@@ -100,6 +119,7 @@ export const CustomModal = () => {
     }
 
     const cancelModals = () => {
+        dispatcher( unsetActivity() )
         setModalType( null );
         setIsOpen( false );
     }

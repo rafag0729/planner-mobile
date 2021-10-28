@@ -11,6 +11,22 @@ export const setDate = ( date: Date): AppActions => {
     }
 }
 
+
+export const selectActivity = (activity: Activity): AppActions => {
+    return {
+        type: 'Select activity',
+        payload: activity
+    }
+}
+
+
+export const unsetActivity = (): AppActions => {
+    return {
+        type: 'Unset selected activity'
+    }
+}
+
+
 export const setDateTimeToModal = ( date: string, startTime: string ): AppActions => {
     return {
         type: 'Add date-startTime to Modal',
@@ -30,6 +46,13 @@ export const loadDBActivities = ( activities: Activity[]): AppActions => {
 export const addNewActivity = ( activity: Activity): AppActions => {
     return {
         type: 'Add a new activity',
+        payload: activity
+    }
+}
+
+export const editActivity = (activity: Activity): AppActions => {
+    return {
+        type: 'Update an activity',
         payload: activity
     }
 }

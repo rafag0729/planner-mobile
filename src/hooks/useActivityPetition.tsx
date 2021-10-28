@@ -2,7 +2,7 @@ import firestore from '@react-native-firebase/firestore';
 import { useContext, useEffect, useState } from "react"
 
 import { Activity, ProjectInterface, RespType, ActivityToSubmit } from '../interfaces/appInterfaces';
-import { addNewActivity, loadDBActivities } from '../reducer/appActions';
+import { addNewActivity, loadDBActivities, editActivity } from '../reducer/appActions';
 import { AppContext, ModalsContext } from '../contexts/contextsManager';
 import { useMoveModalAnimation } from "./hooksManager";
 import { getMonthDays } from '../helpers/helpersManager';
@@ -78,7 +78,7 @@ export const useActivityPetition = () => {
 
     /* Function to choose either between a creation or upload petition */
     const submitActivity = (activity: ActivityToSubmit) => {
-        !activity.id ? createActivity({ ...activity }) : updateActivity(activity)
+        !activity.id ? createActivity({ ...activity }) : updateActivity(activity, activity.id)
     }
 
 
@@ -120,20 +120,25 @@ export const useActivityPetition = () => {
         }
     }
 
-    const updateActivity = async(activity: ActivityToSubmit) => {
+    const updateActivity = async(activity: ActivityToSubmit, id: string) => {
         moveToRight( 1 ) ;
+        try {
+            const { projects, projectTypes } = await loadResources(); 
+            await firestore().doc(`users/vC37t4OJ5DWQ7yPvf3RC/activities/${id}`).update(activity);
+            let activityReducer = {
+                ...activity,
+                id: id,
+                projectName: projects.filter(p => p.id === activity.projectName )[0],
+                activityType: projectTypes.filter(t => t.id === activity.activityType)[0]
+            }
 
-        /* try {
-            const resp = await firestore().collection('users/fechas/actividades').add({
-                hola: 'saludo'
-            });    
+            dispatcher( editActivity( activityReducer ) )
             setRespType('success');
             
             setTimeout(() => {
                 moveToRight( 2 )
-
                 setTimeout(() => {
-                    setShowModal( false )
+                    setIsOpen( false )
                     moveToRight( 0 )
                 }, 1500)
             }, 1500)
@@ -149,7 +154,7 @@ export const useActivityPetition = () => {
                     moveToRight( 0 )
                 }, 1500)
             }, 1500)
-        } */
+        }
     }
 
     const deleteActivity = () => {

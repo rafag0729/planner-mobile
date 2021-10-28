@@ -14,6 +14,8 @@ export interface AppContextInterface {
 
 export type AppActions = 
     | { type: 'Set date', payload: DateSpecs }
+    | { type: 'Select activity', payload: Activity }
+    | { type: 'Unset selected activity' }
     
     | { type: 'Load activities', payload: Activity[] }
     | { type: 'Add a new activity', payload: Activity }
