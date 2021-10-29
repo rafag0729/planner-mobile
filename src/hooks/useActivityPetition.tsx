@@ -2,7 +2,7 @@ import firestore from '@react-native-firebase/firestore';
 import { useContext, useEffect, useState } from "react"
 
 import { Activity, ProjectInterface, RespType, ActivityToSubmit } from '../interfaces/appInterfaces';
-import { addNewActivity, loadDBActivities, editActivity } from '../reducer/appActions';
+import { addNewActivity, loadDBActivities, editActivity, deleteActivityGS, unsetActivity } from '../reducer/appActions';
 import { AppContext, ModalsContext } from '../contexts/contextsManager';
 import { useMoveModalAnimation } from "./hooksManager";
 import { getMonthDays } from '../helpers/helpersManager';
@@ -134,6 +134,7 @@ export const useActivityPetition = () => {
 
             dispatcher( editActivity( activityReducer ) )
             setRespType('success');
+            dispatcher( unsetActivity() )
             
             setTimeout(() => {
                 moveToRight( 2 )
@@ -146,6 +147,7 @@ export const useActivityPetition = () => {
         } catch (error) {
             console.log(error)
             setRespType('failed');
+            dispatcher( unsetActivity() )
 
             setTimeout(() => {
                 moveToRight( 2 )
@@ -157,8 +159,36 @@ export const useActivityPetition = () => {
         }
     }
 
-    const deleteActivity = () => {
-        console.log('Petition delete')
+    const deleteActivity = async (id: string) => {
+        moveToRight( 1 ) ;
+        try {
+            await firestore().doc(`users/vC37t4OJ5DWQ7yPvf3RC/activities/${id}`).delete()
+
+            dispatcher( deleteActivityGS( id ) )
+            setRespType('success');
+            dispatcher( unsetActivity() )
+            
+            setTimeout(() => {
+                moveToRight( 2 )
+                setTimeout(() => {
+                    setIsOpen( false )
+                    moveToRight( 0 )
+                }, 1500)
+            }, 1500)
+            
+        } catch (error) {
+            console.log(error)
+            setRespType('failed');
+            dispatcher( unsetActivity() )
+
+            setTimeout(() => {
+                moveToRight( 2 )
+
+                setTimeout(() => {
+                    moveToRight( 0 )
+                }, 1500)
+            }, 1500)
+        }
     }
 
     return {
@@ -167,6 +197,7 @@ export const useActivityPetition = () => {
         isLoading,
         loadActivities,
         submitActivity,
+        deleteActivity
     }
 
 }

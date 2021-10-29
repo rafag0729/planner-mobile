@@ -27,7 +27,7 @@ export const ActivityNote = ({ activity, view }: Props) => {
         const [ position, length ] = getActivitySpecs( activity );
         setLength( length );
         setPosition( position );
-    }, [])
+    }, [activity])
 
 
     const editActions = (activity: Activity) => {
@@ -35,12 +35,17 @@ export const ActivityNote = ({ activity, view }: Props) => {
         setModalType('edit');
         setIsOpen(true);
     }
-    
+
+    const deleteActions = (activity: Activity) => {
+        dispatcher( selectActivity( activity ) )
+        setModalType('delete');
+        setIsOpen(true);
+    }
 
     return (
         <View style={{ 
             ...activityStyles.container,
-            top: 25 * position,
+            top: 25 * position  + 50,
             height: length * 25,
             backgroundColor: activity.projectName.color,
             width: view === 'D' ? '60%' : view === 'W' ? '80%' : '80%',
@@ -54,7 +59,7 @@ export const ActivityNote = ({ activity, view }: Props) => {
             </View>
             <View style={ activityStyles.actionsPosition }>
                 <EditIcon action={ () => editActions(activity) } size={ 22 } />
-                <DeleteIcon size={ 22 } />
+                <DeleteIcon action={ () => deleteActions(activity) } size={ 22 } />
             </View>
         </View>
     )

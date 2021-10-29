@@ -3,9 +3,11 @@ import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 import { colors, fontFamily } from '../styles/generalStyles';
 
 
+interface Props {
+    type: 'Petition'| 'Activities'
+}
 
-
-export const Loading = () => {
+export const Loading = ({ type }: Props) => {
     return (
         <View style={{ flex: 1, justifyContent: 'center' }}>
             <ActivityIndicator 
@@ -13,7 +15,7 @@ export const Loading = () => {
                 color={ colors.lightBlue }
                 />
 
-            <Text style={ styles.loadingText }>Cargando actividades...</Text>
+            <Text style={ styles.loadingText }>{ type === 'Activities' ? 'Cargando actividades...' : 'Realizando petición'}</Text>
         </View>
     )
 }

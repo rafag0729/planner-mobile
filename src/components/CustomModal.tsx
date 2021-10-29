@@ -18,7 +18,7 @@ export const CustomModal = () => {
 
     const { dateTimeToModal, activitySelected, dispatcher } = useContext(AppContext)
     const { open, setIsOpen, setModalType, type } = useContext(ModalsContext)
-    const { modalPosition, respType, submitActivity } = useActivityPetition()
+    const { modalPosition, respType, submitActivity, deleteActivity } = useActivityPetition()
     const { formValues, setFormValues, resetForm, settingHour, handleInputChange } = useForm({
         id: '',
         projectName: '',
@@ -34,6 +34,12 @@ export const CustomModal = () => {
         open: false,
         setAlertMsg: () => {}
     })
+
+    useEffect(() => {
+        if(type === 'delete' && activitySelected){
+            deleteActivity( activitySelected.id )
+        }
+    }, [type])
 
     useEffect(() => {
         if(formValues.startTime !== '--:-- am/pm'){
@@ -232,7 +238,7 @@ export const CustomModal = () => {
                     </ScrollView>
                 </KeyboardAvoidingView>
 
-                <Loading />
+                <Loading type='Petition' />
                             
                 <CustomAlert
                     type={ respType }

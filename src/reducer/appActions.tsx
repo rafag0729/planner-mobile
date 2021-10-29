@@ -56,3 +56,10 @@ export const editActivity = (activity: Activity): AppActions => {
         payload: activity
     }
 }
+
+export const deleteActivityGS = (id: string): AppActions => {
+    return {
+        type: 'Remove activity',
+        payload: id
+    }
+}
