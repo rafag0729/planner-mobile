@@ -51,31 +51,16 @@ export const appReducer = ( state: AppContextInterface, action: AppActions ): Ap
         case 'Update an activity':
             return {
                 ...state,
-                activities: state.activities.map(sa => {
-                    if(sa.id === action.payload.id){
-                        console.log('match, ', action.payload );
-                        return action.payload;
-                    } else {
-                        return sa
-                    }
-                })
+                activities: state.activities.map(sa => sa.id === action.payload.id ? action.payload : sa )
             }
-    
+
+        case 'Remove activity': 
+            return {
+                ...state,
+                activities: state.activities.filter(a => a.id !== action.payload )
+            }    
+
         default:
             return state;
     }
 }
-
-
-/* What actions do I need 
-
-    daySelected: new Date(),
-- setDate payload( date )
-
-    activities: []
-- loadActivities() en la primera carga
-- addActivity
-- updateActivity
-- removeActivity
-
-*/
